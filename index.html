@@ -9,7 +9,7 @@
 <meta name="description" content="Web-based simulator for the LC-3 (Little Computer 3)">
 <meta name="author" content="William Chargin">
 
-<title>LC-3 Simulator</title>
+<title>LC-3 评测</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/styles.css" rel="stylesheet">
@@ -160,24 +160,27 @@ ga('send', 'pageview');
       </div>
     </div>
     <div class="col-md-6">
-      <h1>Console</h1>
-      <pre class="pre-scrollable" id="console-contents" tabindex="0"></pre>
-      <div class="text-center">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default" id="btn-clear-in">Clear Input Buffer (<span id="buffered-char-count"></span> <span id="buffered-char-noun"></span>)</button>
-          <button type="button" class="btn btn-default" id="btn-clear-out">Clear Output</button>
-        </div>
+      <!-- here goes our test scripts and contents -->
+      <h1>lab 评测</h1>
+      <p>说明：本程序基于 Github 项目 <a href="/wchargin/lc3web">lc3web</a> 修改而来，旨在满足修读 2021 USTC CS1002A 计算系统概论的同学们的可能的需要。</p>
+      <p>请先在本模拟器中载入汇编代码或者机器码（在左侧的 Assemble 和 Raw 选项中载入）</p>
+      <p>机器码需要 0011 0000 0000 0000 开头。</p>
+      <p><span style="color:red">由于脚本限制，请在程序终止处打好断点</span></p>
+      <p>点击下方选择需要评测的实验，目前支持显示测试点正确性以及总执行指令数。</p>
+      <p>评测要求基本参照助教文档。数据是自己随便给的，尽量全一点</p>
+      <p>总 cycle 数的统计开发并不困难，但由于作者懒得数数所以摸了（欢迎联系提供数据）</p>
+      <p>时间可能有点长，静静等待吧（也可能是你死循环了（逃））</p>
+      <div class="panel panel-default" id="bench-panel">
+        <div class="panel-heading"><h3 class="panel-title">选择测试题目</h3></div>
+        <div class="panel-footer">
+          <div class="row" id="scroll-container">
+            <div class="col-xs-12">
+              <button class="btn btn-default" type="button" onclick="bench1()">lab 1</button>
+              <button class="btn btn-default" type="button" onclick="bench2()">lab 2 & 3</button>
+              <button class="btn btn-default" type="button" onclick="bench3()">lab 5</button>
+            </div>
+          </div>
       </div>
-      <div class="form-group" id="newline-select">
-        <div class="radio">
-          <label><input type="radio" name="newline" data-newline="0a" id="newline-0a" checked="checked">Newline as <span class="hex-value">0x0A</span></label>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="newline" data-newline="0d" id="newline-0d">Newline as <span class="hex-value">0x0D</span></label>
-        </div>
-        <div class="radio">
-          <label><input type="radio" name="newline" data-newline="binary" id="newline-binary">Binary (leave newlines unchanged)</label>
-        </div>
       </div>
     </div>
   </div>
@@ -390,6 +393,7 @@ ga('send', 'pageview');
 <script src="js/lc3_as.js"></script>
 <script src="js/lc3_hexbin.js"></script>
 <script src="js/lc3_ui.js"></script>
+<script src="js/lc3_bench.js"></script>
 
 </body>
 
