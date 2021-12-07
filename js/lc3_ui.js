@@ -107,7 +107,7 @@ $(document).ready(function () {
    * Use when executing a bunch of instructions;
    * just update once at the end.
    */
-  var batchMode = false;
+  window.batchMode = false;
 
   /*
    * If in batch mode, the subroutine level at which to exit.
@@ -429,6 +429,9 @@ $(document).ready(function () {
     updateButtons();
   };
 
+  window.gExitBatchMode = function () {
+    exitBatchMode();
+  };
   /*
    * Updates the 'disabled' state of dynamically disabled (.dyndis) buttons.
    */

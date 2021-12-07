@@ -1,4 +1,5 @@
 function bench1() {
+  window.batchMode = true;
   // 对 lab 1 的 bench
   // 初始状态： R0, R1 置为待计算数字，其余均为 0
   const arr1 = document
@@ -35,6 +36,7 @@ function bench1() {
   }
   str += `平均条数 ${sumInstruction / arr1.length}`;
   alert(str);
+  window.gExitBatchMode();
   return;
   function bench_res1() {
     // 判断结果
@@ -52,6 +54,7 @@ function bench2() {
   // r0 是给定的 n，结果存在 r7
   // 其余寄存器初始化为 0
   // 需要计算一个类似斐波那契数列
+  window.batchMode = true;
   function fib(x) {
     var arr = [1, 1, 2];
     for (var i = 3; i <= x; i++) {
@@ -88,6 +91,7 @@ function bench2() {
   }
   str += `平均指令数 ${sumInstruction / testcase.length}`;
   alert(str);
+  window.gExitBatchMode();
   return;
   function bench_res1() {
     // 判断结果
@@ -105,6 +109,7 @@ function bench3() {
   // r0 是给定的 n，结果存在 r1
   // 其余寄存器初始化为 0
   // 需要计算是不是素数
+  window.batchMode = true;
   function isPrime(num) {
     if (num <= 3) {
       return num > 1;
@@ -147,6 +152,7 @@ function bench3() {
   }
   str += `平均指令数 ${sumInstruction / testcase.length}`;
   alert(str);
+  window.gExitBatchMode();
   return;
   function bench_res1() {
     // 判断结果
