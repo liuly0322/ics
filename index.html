@@ -163,15 +163,20 @@ ga('send', 'pageview');
       <!-- here goes our test scripts and contents -->
       <h1>lab 评测</h1>
       <p>说明：本程序基于 Github 项目 <a href="/wchargin/lc3web">lc3web</a> 修改而来，旨在满足修读 2021 USTC CS1002A 计算系统概论的同学们的可能的需要。</p>
-      <p>请先在本模拟器中载入汇编代码或者机器码（在左侧的 Assemble 和 Raw 选项中载入）</p>
-      <p>机器码需要 0011 0000 0000 0000 开头。</p>
+      <p>fork 后仓库： <a href="/liuly0322/lc3web">lc3web</a></p>
+      <p>请先在本模拟器中载入汇编代码或者机器码（在左侧的 Assemble 和 Raw 选项中载入），机器码需要 0011 0000 0000 0000 开头。</p>
       <p><span style="color:red">由于脚本限制，请在程序终止处打好断点</span></p>
-      <p>点击下方选择需要评测的实验，目前支持显示测试点正确性以及总执行指令数。</p>
-      <p>评测要求基本参照助教文档。数据是自己随便给的，尽量全一点</p>
+      <p>点击下方选择需要评测的实验，目前支持显示测试点正确性以及总执行指令数。评测要求基本参照助教文档。数据是自己随便给的，尽量全一点</p>
       <p>总 cycle 数的统计开发并不困难，但由于作者懒得数数所以摸了（欢迎联系提供数据）</p>
-      <p>时间可能有点长，静静等待吧（也可能是你死循环了（逃））</p>
+      <p>时间可能有点长，静静等待吧（也可能是你死循环了（逃）），可以自己看情况改小测试数组</p>
       <div class="panel panel-default" id="bench-panel">
         <div class="panel-heading"><h3 class="panel-title">选择测试题目</h3></div>
+        <div class="panel-body">
+          lab1 乘数数组： <input style="width: 100%;" type="text" id="arr1" value="1, 5, 4000, 65036, 65422, 20211, 25210, 50550, 21098, 1">
+          lab1 被乘数数组： <input style="width: 100%;" type="text" id="arr2" value="1, 4000, 5, 433, 65303, 41016, 60433, 21074, 3, 54">
+          lab2&3 测试数据： <input style="width: 100%;" type="text" id="testcase1" value="1, 2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000">
+          lab5 测试数据： <input style="width: 100%;" type="text" id="testcase2" value="2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000">
+        </div>
         <div class="panel-footer">
           <div class="row" id="scroll-container">
             <div class="col-xs-12">

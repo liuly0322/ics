@@ -1,8 +1,16 @@
 function bench1() {
   // 对 lab 1 的 bench
   // 初始状态： R0, R1 置为待计算数字，其余均为 0
-  const arr1 = [1, 5, 4000, 65036, 65422, 20211, 25210, 50550, 21098, 1];
-  const arr2 = [1, 4000, 5, 433, 65303, 41016, 60433, 21074, 3, 54];
+  const arr1 = document
+    .querySelector("#arr1")
+    .value.replace(/\s*/g, "")
+    .split(",")
+    .map(Number);
+  const arr2 = document
+    .querySelector("#arr2")
+    .value.replace(/\s*/g, "")
+    .split(",")
+    .map(Number);
 
   var str = "";
   var sumInstruction = 0;
@@ -52,9 +60,12 @@ function bench2() {
     return arr[x];
   }
 
-  const testcase = [
-    1, 2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000,
-  ];
+  const testcase = document
+    .querySelector("#testcase1")
+    .value.replace(/\s*/g, "")
+    .split(",")
+    .map(Number);
+
   var str = "";
   var sumInstruction = 0;
   for (var i = 0; i < testcase.length; i++) {
@@ -108,7 +119,12 @@ function bench3() {
     }
   }
 
-  const testcase = [2, 3, 24, 53, 39, 1088, 997, 993, 42, 819, 1200, 1437];
+  const testcase = document
+    .querySelector("#testcase2")
+    .value.replace(/\s*/g, "")
+    .split(",")
+    .map(Number);
+
   var str = "";
   var sumInstruction = 0;
   for (var i = 0; i < testcase.length; i++) {
