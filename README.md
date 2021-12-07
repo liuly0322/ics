@@ -10,4 +10,4 @@ entertained. Large new features are not planned.
 
 ## fork
 
-修改为 lc-3 网页评测
+修改为 lc-3 网页评测。评测脚本放在 js/lc3_bench.js
