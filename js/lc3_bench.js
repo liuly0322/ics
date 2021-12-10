@@ -1,3 +1,24 @@
+function benchTest(f) {
+  const limit = document.querySelector("#cycleLimit").value;
+  lc3.pc = 0x3000;
+  lc3.totalInstruction = 0;
+  var cnt = 0;
+  while (true) {
+    var op = lc3.decode(lc3.getMemory(lc3.pc));
+    if (op.raw === 61477 || op.raw === 0) {
+      var str = f();
+      break;
+    }
+    cnt++;
+    if (cnt > limit) {
+      alert("有测试样例超过单次最高执行指令数，请检查！");
+      return;
+    }
+    lc3.nextInstruction();
+  }
+  return str;
+}
+
 function bench1() {
   window.batchMode = true;
   // 对 lab 1 的 bench
@@ -21,31 +42,20 @@ function bench1() {
     window.lc3.r[1] = arr2[i];
     var ans = (arr1[i] * arr2[i]) % 65536;
     str += `测试数据 ${arr1[i]} * ${arr2[i]} = ${ans} `;
-
-    window.lc3.pc = 0x3000;
-    window.lc3.totalInstruction = 0;
-
-    while (true) {
-      lc3.nextInstruction();
-      if (lc3.pc in breakpoints) {
-        // We've hit a breakpoint. Exit.
-        str += bench_res1();
-        break;
-      }
-    }
+    str += benchTest(bench_res);
   }
   str += `平均条数 ${sumInstruction / arr1.length}`;
   alert(str);
   window.gExitBatchMode();
   return;
-  function bench_res1() {
+  function bench_res() {
     // 判断结果
     var lc3res = window.lc3.r[7];
     sumInstruction += window.lc3.totalInstruction;
     if (lc3res == ans) {
       return `你的回答正确，指令数 ${window.lc3.totalInstruction} \n`;
     } else {
-      return `你的答案是 ${lc3res} \n`;
+      return `\n 错误!!! \n 你的答案是 ${lc3res} \n`;
     }
   }
 }
@@ -76,24 +86,13 @@ function bench2() {
     window.lc3.r[0] = testcase[i];
     var ans = fib(testcase[i]);
     str += `测试数据 F(${testcase[i]}) = ${ans} `;
-
-    window.lc3.pc = 0x3000;
-    window.lc3.totalInstruction = 0;
-
-    while (true) {
-      lc3.nextInstruction();
-      if (lc3.pc in breakpoints) {
-        // We've hit a breakpoint. Exit.
-        str += bench_res1();
-        break;
-      }
-    }
+    str += benchTest(bench_res);
   }
   str += `平均指令数 ${sumInstruction / testcase.length}`;
   alert(str);
   window.gExitBatchMode();
   return;
-  function bench_res1() {
+  function bench_res() {
     // 判断结果
     var lc3res = window.lc3.r[7];
     sumInstruction += window.lc3.totalInstruction;
@@ -137,24 +136,13 @@ function bench3() {
     window.lc3.r[0] = testcase[i];
     var ans = isPrime(testcase[i]);
     str += `测试数据 ${testcase[i]} 是不是素数： ${ans} `;
-
-    window.lc3.pc = 0x3000;
-    window.lc3.totalInstruction = 0;
-
-    while (true) {
-      lc3.nextInstruction();
-      if (lc3.pc in breakpoints) {
-        // We've hit a breakpoint. Exit.
-        str += bench_res1();
-        break;
-      }
-    }
+    str += benchTest(bench_res);
   }
   str += `平均指令数 ${sumInstruction / testcase.length}`;
   alert(str);
   window.gExitBatchMode();
   return;
-  function bench_res1() {
+  function bench_res() {
     // 判断结果
     var lc3res = window.lc3.r[1];
     sumInstruction += window.lc3.totalInstruction;
