@@ -5,7 +5,7 @@ function benchTest(f) {
   var cnt = 0;
   while (true) {
     var op = lc3.decode(lc3.getMemory(lc3.pc));
-    if (op.raw === 61477 || op.raw === 0) {
+    if ((op.raw >= 61440 && op.raw <= 61695) || op.raw === 0) {
       var str = f();
       break;
     }
