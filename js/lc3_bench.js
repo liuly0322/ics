@@ -1,6 +1,7 @@
 function benchTest(f) {
   const limit = document.querySelector("#cycleLimit").value;
   lc3.pc = 0x3000;
+  lc3.psr = 0x8002;
   lc3.totalInstruction = 0;
   var cnt = 0;
   while (true) {
