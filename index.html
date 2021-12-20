@@ -108,6 +108,36 @@ ga('send', 'pageview');
           </div>
       </div></div>
     </div>
+
+    <div class="col-md-6">
+      <!-- here goes our test scripts and contents -->
+      <h1>lab 评测</h1>
+      <p>说明：本程序基于 Github 项目 <a href="https://github.com/wchargin/lc3web">lc3web</a> 修改而来，旨在满足修读 2021 USTC CS1002A 计算系统概论的同学们的可能的需要。</p>
+      <p>fork 后仓库： <a href="https://github.com/liuly0322/lc3web">lc3web</a></p>
+      <p>请先在本模拟器中载入汇编代码或者机器码（在左侧的 Assemble 和 Raw 选项中载入），机器码需要 0011 0000 0000 0000 开头。</p>
+      <p>然后选择预设后点击评测即可</p>
+      <p>特性：评测开始时条件码总为 Z，这与助教标准（开始时为 000）略有不同</p>
+      <div class="panel panel-default" id="bench-panel">
+        <div class="panel-heading"><h3 class="panel-title">选择测试题目</h3></div>
+        <div class="panel-body">
+          限制单次指令数：<input type="number" id="cycleLimit" value="1000000"><br>
+          样例数组（逗号分割）： <input style="width: 100%;" type="text" id="testcase">
+          评测及初始化内存，寄存器函数： <textarea style="width: 100%;" id="expectedJudge" rows="4"></textarea>
+          读取答案函数： <textarea style="width: 100%;" id="yourJudge" rows="2"></textarea>
+        </div>
+        <div class="panel-footer">
+          <div class="row" id="scroll-container">
+            <div class="col-xs-12">
+              <button class="btn btn-default" type="button" onclick="toggle(1)">lab 1 预设</button>
+              <button class="btn btn-default" type="button" onclick="toggle(2)">lab 2 & 3 预设</button>
+              <button class="btn btn-default" type="button" onclick="toggle(3)">lab 5 预设</button>
+              <button class="btn btn-default" type="button" onclick="bench()">评测</button>
+            </div>
+          </div>
+      </div>
+      </div>
+    </div>
+
     <div class="col-md-6">
       <h1>Status</h1>
       <div class="panel panel-default" id="register-panel">
@@ -159,34 +189,7 @@ ga('send', 'pageview');
         The machine has been halted.
       </div>
     </div>
-    <div class="col-md-6">
-      <!-- here goes our test scripts and contents -->
-      <h1>lab 评测</h1>
-      <p>说明：本程序基于 Github 项目 <a href="https://github.com/wchargin/lc3web">lc3web</a> 修改而来，旨在满足修读 2021 USTC CS1002A 计算系统概论的同学们的可能的需要。</p>
-      <p>fork 后仓库： <a href="https://github.com/liuly0322/lc3web">lc3web</a></p>
-      <p>请先在本模拟器中载入汇编代码或者机器码（在左侧的 Assemble 和 Raw 选项中载入），机器码需要 0011 0000 0000 0000 开头。</p>
-      <p>然后即可点击下方选择需要评测的实验，目前支持显示测试点正确性以及总执行指令数。评测要求基本参照助教文档。数据是自己随便给的，尽量全一点</p>
-      <p>特性：评测开始时条件码总为 Z，这与助教标准（开始时为 000）略有不同</p>
-      <div class="panel panel-default" id="bench-panel">
-        <div class="panel-heading"><h3 class="panel-title">选择测试题目</h3></div>
-        <div class="panel-body">
-          限制单次指令数：<input type="number" id="cycleLimit" value="1000000"><br>
-          lab1 乘数数组： <input style="width: 100%;" type="text" id="arr1" value="1, 5, 4000, 65036, 65422, 20211, 25210, 50550, 21098, 1">
-          lab1 被乘数数组： <input style="width: 100%;" type="text" id="arr2" value="1, 4000, 5, 433, 65303, 41016, 60433, 21074, 3, 54">
-          lab2&3 测试数据： <input style="width: 100%;" type="text" id="testcase1" value="1, 2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000">
-          lab5 测试数据： <input style="width: 100%;" type="text" id="testcase2" value="2, 3, 4, 7, 456, 993, 997, 1569, 9293, 121, 9339, 1437">
-        </div>
-        <div class="panel-footer">
-          <div class="row" id="scroll-container">
-            <div class="col-xs-12">
-              <button class="btn btn-default" type="button" onclick="bench1()">lab 1</button>
-              <button class="btn btn-default" type="button" onclick="bench2()">lab 2 & 3</button>
-              <button class="btn btn-default" type="button" onclick="bench3()">lab 5</button>
-            </div>
-          </div>
-      </div>
-      </div>
-    </div>
+
   </div>
 </div>
 
@@ -397,7 +400,7 @@ ga('send', 'pageview');
 <script src="js/lc3_as.js"></script>
 <script src="js/lc3_hexbin.js"></script>
 <script src="js/lc3_ui.js"></script>
-<script src="js/lc3_bench.js?v=5"></script>
+<script src="js/lc3_bench.js?v=6"></script>
 
 </body>
 

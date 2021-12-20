@@ -1,71 +1,106 @@
-function benchTest(f) {
+// lc3 bench
+
+class caseResult {
+  constructor(state, instructions, expectedResult, yourResult) {
+    this.state = state;
+    this.instructions = instructions;
+    this.expectedResult = expectedResult;
+    this.yourResult = yourResult;
+  }
+}
+
+function caseTest() {
   const limit = document.querySelector("#cycleLimit").value;
   lc3.pc = 0x3000;
   lc3.psr = 0x8002;
   lc3.totalInstruction = 0;
-  var cnt = 0;
+  let cnt = 0;
   while (true) {
-    var op = lc3.decode(lc3.getMemory(lc3.pc));
+    let op = lc3.decode(lc3.getMemory(lc3.pc));
     if ((op.raw >= 61440 && op.raw <= 61695) || op.raw === 0) {
-      var str = f();
-      break;
+      return true;
     }
     cnt++;
     if (cnt > limit) {
-      alert("有测试样例超过单次最高执行指令数，请检查！");
-      return;
+      return false;
     }
     lc3.nextInstruction();
   }
-  return str;
 }
 
-function bench1() {
+// expectedJudge 接受样例输入，返回正确结果，并重置内存和寄存器
+// yourJudge 从当前 lc-3 中读取判断的结果
+// cases 是一个字符串，逗号分隔每一个样例
+function lc3bench(expectedJudge, yourJudge, cases) {
   window.batchMode = true;
-  // 对 lab 1 的 bench
-  // 初始状态： R0, R1 置为待计算数字，其余均为 0
-  const arr1 = document
-    .querySelector("#arr1")
-    .value.replace(/\s*/g, "")
-    .split(",")
-    .map(Number);
-  const arr2 = document
-    .querySelector("#arr2")
-    .value.replace(/\s*/g, "")
-    .split(",")
-    .map(Number);
 
-  var str = "";
-  var sumInstruction = 0;
-  for (var i = 0; i < arr1.length; i++) {
-    window.lc3.r = [0, 0, 0, 0, 0, 0, 0, 0];
-    window.lc3.r[0] = arr1[i];
-    window.lc3.r[1] = arr2[i];
-    var ans = (arr1[i] * arr2[i]) % 65536;
-    str += `测试数据 ${arr1[i]} * ${arr2[i]} = ${ans} `;
-    str += benchTest(bench_res);
+  let expectedResult, yourResult, testCases;
+  eval(`expectedResult = ${expectedJudge}`);
+  eval(`yourResult = ${yourJudge}`);
+  testCases = cases.replace(/\s*/g, "").replace(/，/g, ",").split(",");
+
+  let caseResults = [];
+
+  for (const caseNow of testCases) {
+    const correctAns = expectedResult(caseNow);
+    const caseState = caseTest();
+    const yourAns = yourResult();
+    caseResults.push(
+      new caseResult(caseState, lc3.totalInstruction, correctAns, yourAns)
+    );
   }
-  str += `平均条数 ${sumInstruction / arr1.length}`;
-  alert(str);
-  window.gExitBatchMode();
-  return;
-  function bench_res() {
-    // 判断结果
-    var lc3res = window.lc3.r[7];
-    sumInstruction += window.lc3.totalInstruction;
-    if (lc3res == ans) {
-      return `你的回答正确，指令数 ${window.lc3.totalInstruction} \n`;
+
+  // 接下来需要对 caseResults 进行分析
+  let alertString = "";
+  const totalCases = caseResults.length;
+  let totalInstructions = 0;
+  let passCases = 0;
+  caseResults.forEach((caseResult, index) => {
+    if (caseResult.state == false) {
+      alertString += `case ${index + 1} 超出最大执行指令数\n`;
+    } else if (caseResult.expectedResult == caseResult.yourResult) {
+      passCases++;
+      totalInstructions += caseResult.instructions;
+      alertString += `pass case ${index + 1} with instructions ${
+        caseResult.instructions
+      }, Ans: ${caseResult.expectedResult}, Your: ${caseResult.yourResult}\n`;
     } else {
-      return `\n 错误!!! \n 你的答案是 ${lc3res} \n`;
+      alertString += `fail case ${index + 1}. Ans: ${
+        caseResult.expectedResult
+      }, Your: ${caseResult.yourResult}\n`;
     }
+  });
+
+  if (passCases == totalCases) {
+    alertString += `per instructions: ${totalInstructions / totalCases}`;
   }
+
+  alertString = `pass: ${passCases} / ${totalCases}\n` + alertString;
+
+  alert(alertString);
+
+  window.gExitBatchMode();
 }
 
-function bench2() {
-  // r0 是给定的 n，结果存在 r7
-  // 其余寄存器初始化为 0
-  // 需要计算一个类似斐波那契数列
-  window.batchMode = true;
+function toggle(index) {
+  const expectedJudge = document.querySelector("#expectedJudge");
+  const yourJudge = document.querySelector("#yourJudge");
+  const testcase = document.querySelector("#testcase");
+  if (index == 1) {
+    expectedJudge.value = `function (testcase) {
+  let arr = testcase.split("*").map(Number)
+  let ans = (arr[0] * arr[1]) % 65536;
+  ans = ans >= 0 ? ans : ans + 65536;
+  lc3.r = [arr[0], arr[1], 0, 0, 0, 0, 0, 0];
+  return ans;
+}`;
+    yourJudge.value = `function () {
+  return lc3.r[7];
+}`;
+    testcase.value =
+      "1*1, 5*4000, 4000*5, 65036*433, 65422*65303, 20211*41016, 25210*60433, 50550*21074, 21098*3, 1*54";
+  } else if (index == 2) {
+    expectedJudge.value = `function (testcase) {
   function fib(x) {
     var arr = [1, 1, 2];
     for (var i = 3; i <= x; i++) {
@@ -73,84 +108,43 @@ function bench2() {
     }
     return arr[x];
   }
-
-  const testcase = document
-    .querySelector("#testcase1")
-    .value.replace(/\s*/g, "")
-    .split(",")
-    .map(Number);
-
-  var str = "";
-  var sumInstruction = 0;
-  for (var i = 0; i < testcase.length; i++) {
-    window.lc3.r = [0, 0, 0, 0, 0, 0, 0, 0];
-    window.lc3.r[0] = testcase[i];
-    var ans = fib(testcase[i]);
-    str += `测试数据 F(${testcase[i]}) = ${ans} `;
-    str += benchTest(bench_res);
-  }
-  str += `平均指令数 ${sumInstruction / testcase.length}`;
-  alert(str);
-  window.gExitBatchMode();
-  return;
-  function bench_res() {
-    // 判断结果
-    var lc3res = window.lc3.r[7];
-    sumInstruction += window.lc3.totalInstruction;
-    if (lc3res == ans) {
-      return `你的回答正确，指令数 ${window.lc3.totalInstruction} \n`;
-    } else {
-      return `你的答案是 ${lc3res} \n`;
-    }
-  }
-}
-
-function bench3() {
-  // r0 是给定的 n，结果存在 r1
-  // 其余寄存器初始化为 0
-  // 需要计算是不是素数
-  window.batchMode = true;
+  let n = parseInt(testcase)
+  let ans = fib(n)
+  lc3.r = [n, 0, 0, 0, 0, 0, 0, 0];
+  return ans;
+}`;
+    yourJudge.value = `function () {
+  return lc3.r[7];
+}`;
+    testcase.value =
+      "1, 2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000";
+  } else if (index == 3) {
+    expectedJudge.value = `function (testcase) {
   function isPrime(num) {
-    if (num <= 3) {
-      return num > 1;
-    } else {
+    if (num <= 3) { return num > 1}
+    else {
       let sq = Math.sqrt(num);
-      for (let i = 2; i <= sq; i++) {
-        if (num % i === 0) {
+      for (let i = 2; i <= sq; i++)
+        if (num % i === 0)
           return false;
-        }
-      }
       return true;
     }
   }
-
-  const testcase = document
-    .querySelector("#testcase2")
-    .value.replace(/\s*/g, "")
-    .split(",")
-    .map(Number);
-
-  var str = "";
-  var sumInstruction = 0;
-  for (var i = 0; i < testcase.length; i++) {
-    window.lc3.r = [0, 0, 0, 0, 0, 0, 0, 0];
-    window.lc3.r[0] = testcase[i];
-    var ans = isPrime(testcase[i]);
-    str += `测试数据 ${testcase[i]} 是不是素数： ${ans} `;
-    str += benchTest(bench_res);
+  let n = parseInt(testcase)
+  let ans = isPrime(n);
+  lc3.r = [n, 0, 0, 0, 0, 0, 0, 0];
+  return ans;
+}`;
+    yourJudge.value = `function () {
+  return lc3.r[1];
+}`;
+    testcase.value = "2, 3, 4, 7, 456, 993, 997, 1569, 9293, 121, 9339, 1437";
   }
-  str += `平均指令数 ${sumInstruction / testcase.length}`;
-  alert(str);
-  window.gExitBatchMode();
-  return;
-  function bench_res() {
-    // 判断结果
-    var lc3res = window.lc3.r[1];
-    sumInstruction += window.lc3.totalInstruction;
-    if (lc3res == ans) {
-      return `你的回答正确，指令数 ${window.lc3.totalInstruction} \n`;
-    } else {
-      return `你的答案是 ${lc3res} \n`;
-    }
-  }
+}
+
+function bench() {
+  const expectedJudge = document.querySelector("#expectedJudge").value;
+  const yourJudge = document.querySelector("#yourJudge").value;
+  const testcase = document.querySelector("#testcase").value;
+  lc3bench(expectedJudge, yourJudge, testcase);
 }
