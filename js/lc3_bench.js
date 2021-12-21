@@ -102,8 +102,8 @@ function toggle(index) {
   } else if (index == 2) {
     expectedJudge.value = `function (testcase) {
   function fib(x) {
-    var arr = [1, 1, 2];
-    for (var i = 3; i <= x; i++) {
+    let arr = [1, 1, 2];
+    for (let i = 3; i <= x; i++) {
       arr[i] = (arr[i - 1] + 2 * arr[i - 3]) % 1024;
     }
     return arr[x];
