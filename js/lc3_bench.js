@@ -120,6 +120,16 @@ function toggle(index) {
       "1, 2, 3, 24, 144, 456, 1088, 1092, 2096, 4200, 8192, 12000, 14000";
   } else if (index == 3) {
     expectedJudge.value = `function (testcase) {
+  let ans = [0x5, 0x0, 0x300f, 0x0, 0x0, 0x0, 0x0, 0x3003];
+  lc3.r = [0, 0, 0, 0, 0, 0, 0, 0];
+  return ans.toString();
+}`;
+    yourJudge.value = `function () {
+  return lc3.r.toString();
+}`;
+    testcase.value = "0";
+  } else if (index == 4) {
+    expectedJudge.value = `function (testcase) {
   function isPrime(num) {
     if (num <= 3) { return num > 1}
     else {
