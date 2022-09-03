@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "useDefineForClassFields": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "baseUrl": "."
+  },
+  "include": ["docs/.vitepress/**/*.ts", "docs/.vitepress/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}
