@@ -1,5 +1,7 @@
 # ICS FALL 2022 USTC CS1002A.02
 
+## 说明
+
 课程主页仓库
 
 `docs/` 下的 md 文件即对应网站相应 url
@@ -14,3 +16,21 @@ LC3 评测使用 <https://github.com/wchargin/lc3web>, 参照原项目协议
 - fighting-design
 
 等
+
+## 部署
+
+依赖：npm, pnpm（略）
+
+clone 本仓库
+
+浏览器预览
+
+```
+pnpm run dev
+```
+
+生成静态文件
+
+```
+pnpm run build
+```
