@@ -58,10 +58,10 @@ const bench = async () => {
 </script>
 
 <template>
-  <f-card>
+  <div class="card">
     <div class="form-item">
       <span class="label">单样例最大指令数</span>
-      <input type="number" style="border: 0.5px solid; margin: 4px" v-model="instrLimit" />
+      <input type="number" style="border: 0.5px solid; padding:0.5em; margin: 4px" v-model="instrLimit" />
     </div>
 
     <div class="form-item">
@@ -74,13 +74,15 @@ const bench = async () => {
       </div>
     </div>
 
-    <f-card title="实验要求" style="margin-bottom: 2em">
-      {{ model.description }}
-    </f-card>
+    <div class="card" style="margin-bottom: 2em">
+      <span class="label">实验要求</span>
+      <div>{{ model.description }}</div>
+    </div>
 
     <div class="form-item">
       <span class="label">测试样例，样例之间以英文逗号分割</span>
-      <input style="border: 0.5px solid; margin: 4px; box-sizing: border-box; width: 100%" v-model="model.testCases" />
+      <input style="border: 0.5px solid; padding: 0.5em; margin: 4px; box-sizing: border-box; width: 100%"
+        v-model="model.testCases" />
     </div>
 
     <div class="form-item">
@@ -110,17 +112,24 @@ const bench = async () => {
     <div style="display: flex; justify-content: flex-end">
       <f-button type="primary" @click="bench()"> 评测 </f-button>
     </div>
-    <f-card v-if="outputs.length" title="评测结果" style="margin-top: 2em">
+
+    <div v-if="outputs.length" class="card" style="margin-top: 2em">
+      <span class="label">评测结果</span>
       <ul>
         <li v-for="output in outputs" :key="output">{{ output }}</li>
       </ul>
-    </f-card>
-  </f-card>
+    </div>
+  </div>
 
 
 </template>
 
 <style>
+.card {
+  border: #e5e5e5 solid 1px;
+  padding: 20px
+}
+
 .form-item {
   margin-bottom: 1em
 }
@@ -133,6 +142,7 @@ const bench = async () => {
 textarea {
   box-sizing: border-box;
   width: 100%;
-  padding: 0.5em
+  padding: 0.5em;
+  font-family: Consolas, "Courier New", Courier, FreeMono, monospace
 }
 </style>
