@@ -1,42 +1,16 @@
-# Vitepress-template
+# ICS FALL 2022 USTC CS1002A.02
 
-## 💬 介绍
+课程主页仓库
 
-[Vitepress](https://vitepress.vuejs.org) 模板，快速搭建你的静态网站和博客。
+`docs/` 下的 md 文件即对应网站相应 url
 
-## ✨ 特性
+对本仓库的修改会自动 push 到网页上, 欢迎 PR 和 Issue
 
-- 📌 开箱即用
-- 🚀 和 [fighting-design](https://github.com/FightingDesign/fighting-design) 完美融合
-- 💪 使用 Vue.js 最新特性开发
-- 🐆 全面基于 Vite，速度够快
-- 🖍️ markdown 中直接使用 vue 组件
-- ✔️ 配置简单，上手容易
-- 🚩 markdown 中直接使用 setup 语法糖
-- 📃 第三方组件库支持
+LC3 评测使用 <https://github.com/wchargin/lc3web>, 参照原项目协议
 
-## 👀 启动
+其余使用 MIT 协议, 感谢第三方库
 
-```shell
-# 安装依赖
-pnpm i
+- Vitepress
+- fighting-design
 
-# 启动
-pnpm dev
-
-# 打包
-pnpm build
-
-# 预览打包
-pnpm serve
-```
-
-## 🕵️‍♀️ 更新日志
-
-参考 [CHANGELOG.md](https://github.com/Tyh2001/vitepress-template/blob/master/CHANGELOG.md)
-
-## 🙏 贡献者
-
-该仓库由 [Tyh2001](https://github.com/Tyh2001) 提供。
-
-![](https://tianyuhao.cn/images/auto/weixin.png)
+等
