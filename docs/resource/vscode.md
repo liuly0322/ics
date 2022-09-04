@@ -30,21 +30,27 @@
 
 ![](../images/vscode_tutorial/error.png)
 
-可以发现还不能识别，我们需要把 mingw 所在路径的 `bin` 文件夹路径加到环境变量里。左下角搜索框搜索环境变量：
+可以发现还不能识别，我们需要把 mingw 所在路径的 `bin` 文件夹路径加到环境变量里。
 
-<img src="../images/vscode_tutorial/search.png" style="zoom:33%;" />
+### 获取 `bin` 文件夹路径
 
-选择“编辑系统环境变量”，点击右下角的“环境变量”，然后双击用户变量或系统变量中的 **Path**（这里如果你就一个用户加在哪都没区别，我这里加在用户变量里），点击右侧的”新建“，将 **`bin` 目录** 添加到环境变量：
-
-<img src="../images/vscode_tutorial/add-ev.png" style="zoom:50%;" />
-
-（这里的最后一条就是我们新添加的环境变量）
-
-`bin` 目录位置的获取可以通过右键 `bin` 文件夹里的空白地方得到：
+`bin` 文件夹路径的获取可以通过右键 `bin` 文件夹里的空白地方得到：
 
 ![](../images/vscode_tutorial/check-path.png)
 
-以上图而言，在 `C:\...\mingw64` 这一串路径上后加上 `\bin` 即可
+以上图而言，在 `...\mingw64` 这一串路径上后加上 `\bin` 就是 `bin` 文件夹路径
+
+### 增加环境变量
+
+左下角系统搜索框，搜索“环境变量”：
+
+<img src="../images/vscode_tutorial/search.png" style="zoom:33%;" />
+
+选择“编辑系统环境变量”，点击右下角的“环境变量”，然后双击用户变量或系统变量中的 **Path**（这里如果你就一个用户加在哪都没区别，我这里加在用户变量里），点击右侧的”新建“，将之前获取到的 **`bin` 文件夹路径** 添加到环境变量：
+
+<img src="../images/vscode_tutorial/add-ev.png" style="zoom:50%;" />
+
+（最后一条就是我们新添加的环境变量）
 
 之后重启 VSCode 再次输入 `gcc --version`，如果得到如下输出说明配置成功：
 
