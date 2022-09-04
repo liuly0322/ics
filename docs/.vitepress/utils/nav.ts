@@ -19,4 +19,9 @@ export const nav = [
     activeMatch: '/resource',
     link: '/resource',
   },
+  {
+    text: '其他',
+    activeMatch: '/others',
+    link: '/others',
+  },
 ]

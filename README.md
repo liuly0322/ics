@@ -21,7 +21,11 @@ LC3 评测使用 <https://github.com/wchargin/lc3web>, 参照原项目协议
 
 依赖：npm, pnpm（略）
 
-clone 本仓库
+clone 本仓库并安装所需的库
+
+```
+pnpm install
+```
 
 浏览器预览
 
