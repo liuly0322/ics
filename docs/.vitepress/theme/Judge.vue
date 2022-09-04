@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
-import { presets, getPreset } from './lc3/lc3_preset'
+import { FMessage } from 'fighting-design'
+import { getPreset, presets } from './lc3/lc3_preset'
 import lc3Bench from './lc3/lc3_bench'
-
+import { computed, nextTick, ref, watch } from 'vue'
 
 const instrLimit = ref(100000)
 const lab = ref('自定义')
 const model = ref(getPreset(lab.value))
-const code = ref('')
+const code = ref(window.localStorage.getItem('lc3code') ?? '')
 const log = ref(false)
 const outputs = ref([] as string[])
 
 const cases = computed(() =>
-  model.value.testCases.split(',').map((s: string) => s.trim()).filter(Boolean)
+  model.value.testCases.split(',').map((s: string) => s.trim()).filter(Boolean),
 )
+
+watch(code, (cur) => {
+  window.localStorage.setItem('lc3code', cur)
+})
 
 watch(lab, (cur) => {
   model.value = getPreset(cur)
@@ -22,26 +26,27 @@ watch(lab, (cur) => {
 
 watch(log, (cur) => {
   if (cur) {
-    window.alert(
-      '开启调试模式后，将只显示第一个测试样例的完整执行过程，其余样例会被忽略...'
-    )
+    FMessage({
+      message: '开启调试模式后为了避免混淆，只显示第一个样例...',
+      type: 'success',
+    })
   }
 })
 
 const bench = async () => {
   outputs.value = []
-  if (!code.value) {
+  if (!code.value)
     outputs.value.push('没有填写待评测代码，无法评测...')
-  }
-  if (!model.value.testCode) {
+
+  if (!model.value.testCode)
     outputs.value.push('没有评测函数，无法评测...')
-  }
-  if (!model.value.ansCode) {
+
+  if (!model.value.ansCode)
     outputs.value.push('没有答案函数，无法评测...')
-  }
-  if (!cases.value.length) {
+
+  if (!cases.value.length)
     outputs.value.push('没有测试样例，无法评测...')
-  }
+
   if (!outputs.value.length) {
     outputs.value = lc3Bench(
       code.value,
@@ -49,7 +54,7 @@ const bench = async () => {
       model.value.ansCode,
       cases.value,
       instrLimit.value,
-      log.value
+      log.value,
     )
   }
   await nextTick()
@@ -61,14 +66,14 @@ const bench = async () => {
   <div class="card">
     <div class="form-item">
       <span class="label">单样例最大指令数</span>
-      <input type="number" style="border: 0.5px solid; padding:0.5em; margin: 4px" v-model="instrLimit" />
+      <input v-model="instrLimit" type="number" style="border: 0.5px solid; padding:0.5em; margin: 4px">
     </div>
 
     <div class="form-item">
       <span class="label">选择评测实验</span>
       <div style="display: flex">
         <div v-for="preset in presets" :key="preset" style="margin: 4px">
-          <input type="radio" :id="preset" :value="preset" v-model="lab" />
+          <input :id="preset" v-model="lab" type="radio" :value="preset">
           <label :for="preset">{{ preset }}</label>
         </div>
       </div>
@@ -81,47 +86,55 @@ const bench = async () => {
 
     <div class="form-item">
       <span class="label">测试样例，样例之间以英文逗号分割</span>
-      <input style="border: 0.5px solid; padding: 0.5em; margin: 4px; box-sizing: border-box; width: 100%"
-        v-model="model.testCases" />
+      <input
+        v-model="model.testCases"
+        style="border: 0.5px solid; padding: 0.5em; margin: 4px; box-sizing: border-box; width: 100%"
+      >
     </div>
 
     <div class="form-item">
       <span class="label">代码文本</span>
-      <textarea rows="10" placeholder="在此输入待评测的汇编代码或者机器码" style="border: 0.5px solid; margin: 4px"
-        v-model="code"></textarea>
+      <textarea v-model="code" rows="10" placeholder="在此输入待评测的汇编代码或者机器码" style="border: 0.5px solid; margin: 4px" />
     </div>
 
-    <div class="form-item" v-show="lab === '自定义'">
+    <div v-show="lab === '自定义'" class="form-item">
       <span class="label">评测函数</span>
-      <textarea rows="10" placeholder="一个 js 函数，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
-        style="border: 0.5px solid; margin: 4px" v-model="model.testCode"></textarea>
+      <textarea
+        v-model="model.testCode" rows="10"
+        placeholder="一个 js 函数，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
+        style="border: 0.5px solid; margin: 4px"
+      />
     </div>
 
-    <div class="form-item" v-show="lab === '自定义'">
+    <div v-show="lab === '自定义'" class="form-item">
       <span class="label">答案函数</span>
-      <textarea rows="10"
+      <textarea
+        v-model="model.ansCode" rows="10"
         placeholder="一个 js 函数，返回测试结束后读取 lc3 模拟器的哪个变量（如 lc3.r 和 lc3.memory 数组中的某一项）的值作为用户程序运行的输出（即评测依据）"
-        style="border: 0.5px solid; margin: 4px" v-model="model.ansCode"></textarea>
+        style="border: 0.5px solid; margin: 4px"
+      />
     </div>
 
     <div class="form-item">
       <span class="label">启用调试模式（支持追踪 pc 和寄存器变化）</span>
-      <f-switch v-model="log"></f-switch>
+      <f-switch v-model="log" />
     </div>
 
     <div style="display: flex; justify-content: flex-end">
-      <f-button type="primary" @click="bench()"> 评测 </f-button>
+      <f-button type="primary" @click="bench()">
+        评测
+      </f-button>
     </div>
 
     <div v-if="outputs.length" class="card" style="margin-top: 2em">
       <span class="label">评测结果</span>
       <ul>
-        <li v-for="output in outputs" :key="output">{{ output }}</li>
+        <li v-for="output in outputs" :key="output">
+          {{ output }}
+        </li>
       </ul>
     </div>
   </div>
-
-
 </template>
 
 <style>

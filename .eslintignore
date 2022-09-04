@@ -1,0 +1,4 @@
+.github
+docs/.vitepress/theme/lc3/lc3_core.js
+docs/.vitepress/theme/lc3/lc3_as.js
+docs/.vitepress/theme/lc3/lc3_hexbin.js

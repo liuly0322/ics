@@ -1,7 +1,7 @@
 import DefaultTheme from 'vitepress/theme'
+import FightingDesign from 'fighting-design'
 import { onMounted } from 'vue'
 
-import FightingDesign from 'fighting-design'
 import 'fighting-design/dist/index.css'
 
 const sakanaInit = async () => {

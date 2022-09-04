@@ -17,8 +17,11 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - name: lint
+        run: pnpm i && pnpm lint
+
       - name: build
-        run: pnpm i && pnpm run build && touch docs/.vitepress/dist/.nojekyll && echo 'ics.liuly.moe' > docs/.vitepress/dist/CNAME
+        run: pnpm run build && touch docs/.vitepress/dist/.nojekyll && echo 'ics.liuly.moe' > docs/.vitepress/dist/CNAME
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop

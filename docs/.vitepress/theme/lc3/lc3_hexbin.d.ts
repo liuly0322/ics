@@ -1,7 +1,6 @@
 declare const _default: (fileContents: string) =>
   | {
       error: string
-      type?: string
     }
   | {
       orig: number

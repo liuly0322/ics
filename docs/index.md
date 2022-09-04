@@ -12,4 +12,4 @@
 
 本站主要给出一些课程补充资源及实验 Q&A
 
-![](images/ICS-3rd.jpg)
+![](images/ICS-3rd.png)

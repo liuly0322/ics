@@ -15,6 +15,10 @@
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": "."
   },
-  "include": ["docs/.vitepress/**/*.ts", "docs/.vitepress/**/*.d.ts"],
+  "include": [
+    "docs/.vitepress/**/*.ts",
+    "docs/.vitepress/**/*.d.ts",
+    "docs/.vitepress/**/*.vue"
+  ],
   "exclude": ["node_modules", "dist"]
 }

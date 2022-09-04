@@ -1,7 +1,6 @@
 declare const _default: (text: string) =>
   | {
       error: string
-      type?: string
     }
   | {
       orig: number
