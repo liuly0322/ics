@@ -30,11 +30,11 @@ pnpm install
 浏览器预览
 
 ```
-pnpm run dev
+pnpm dev
 ```
 
 生成静态文件
 
 ```
-pnpm run build
+pnpm build
 ```
