@@ -1,3 +1,9 @@
 .vp-doc a {
     word-wrap:break-word;
 }
+
+html.dark .f-message {
+    background: #333;
+    color: #fff;
+    box-shadow: #222222 1px 1px 7px, #222222 -1px -1px 7px
+}

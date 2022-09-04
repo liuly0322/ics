@@ -31,38 +31,39 @@ watch(lab, (cur) => {
 watch(log, (cur) => {
   if (cur) {
     FMessage({
-      message: '开启调试模式后为了避免混淆，只显示第一个样例...',
-      type: 'success',
+      message: '开启调试模式后为了避免混淆，只显示第一个样例',
+      type: 'primary',
     })
   }
 })
 
-const bench = async () => {
+const bench = () => {
   outputs.value = []
-  if (!code.value)
-    outputs.value.push('没有填写待评测代码，无法评测...')
 
-  if (!model.value.testCode)
-    outputs.value.push('没有评测函数，无法评测...')
-
-  if (!model.value.ansCode)
-    outputs.value.push('没有答案函数，无法评测...')
-
-  if (!cases.value.length)
-    outputs.value.push('没有测试样例，无法评测...')
-
-  if (!outputs.value.length) {
-    outputs.value = lc3Bench(
-      code.value,
-      model.value.testCode,
-      model.value.ansCode,
-      cases.value,
-      instrLimit.value,
-      log.value,
+  const errors = [[!code.value, '待测代码'],
+    [!model.value.testCode, '评测函数'],
+    [!model.value.ansCode, '答案函数'],
+    [!cases.value.length, '测试样例']]
+    .filter(err => err[0])
+    .map(err => `缺少${err[1]}，无法评测`)
+    .map(err =>
+      FMessage({
+        message: err,
+        type: 'danger',
+      }),
     )
-  }
-  await nextTick()
-  window.scrollTo(0, document.documentElement.scrollHeight)
+
+  if (errors.length)
+    return
+
+  outputs.value = lc3Bench(
+    code.value,
+    model.value.testCode,
+    model.value.ansCode,
+    cases.value,
+    instrLimit.value,
+    log.value,
+  )
 }
 </script>
 
