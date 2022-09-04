@@ -3,6 +3,7 @@ import FightingDesign from 'fighting-design'
 import { onMounted } from 'vue'
 
 import 'fighting-design/dist/index.css'
+import './custom.css'
 
 const sakanaInit = async () => {
   const SakanaWidget = (await import('sakana-widget')).default
