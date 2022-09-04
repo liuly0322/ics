@@ -10,7 +10,8 @@ import { sidebar } from './utils/sidebar'
 
 const config = defineConfig({
   title: 'ICS Fall 2022',
-
+  description: 'USTC ICS CS1002A.02 Fall 2022 Homepage',
+  lastUpdated: true,
   themeConfig: {
     lastUpdatedText: '最后更新时间',
     socialLinks: [
@@ -19,6 +20,10 @@ const config = defineConfig({
         link: 'https://github.com/liuly0322',
       },
     ],
+    editLink: {
+      pattern: 'https://github.com/liuly0322/ics/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
     nav,
     sidebar,
   },
