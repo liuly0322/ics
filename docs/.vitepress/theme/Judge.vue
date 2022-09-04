@@ -2,18 +2,22 @@
 import { FMessage } from 'fighting-design'
 import { getPreset, presets } from './lc3/lc3_preset'
 import lc3Bench from './lc3/lc3_bench'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 const instrLimit = ref(100000)
 const lab = ref('自定义')
 const model = ref(getPreset(lab.value))
-const code = ref(window.localStorage.getItem('lc3code') ?? '')
+const code = ref('')
 const log = ref(false)
 const outputs = ref([] as string[])
 
 const cases = computed(() =>
   model.value.testCases.split(',').map((s: string) => s.trim()).filter(Boolean),
 )
+
+onMounted(() => {
+  code.value = window.localStorage.getItem('lc3code') ?? ''
+})
 
 watch(code, (cur) => {
   window.localStorage.setItem('lc3code', cur)
