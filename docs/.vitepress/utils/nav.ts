@@ -10,13 +10,13 @@ export const nav = [
     link: '/judge',
   },
   {
-    text: '实验补充',
+    text: '实验',
     activeMatch: '/supply',
     link: '/supply',
   },
   {
     text: '资源',
     activeMatch: '/resource',
-    link: '/resource',
+    link: '/resource/ics',
   },
 ]
