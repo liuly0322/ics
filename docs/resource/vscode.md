@@ -4,6 +4,7 @@
 
 1. **只供感兴趣的同学参考，非必做，做了也不会获得任何形式的加分。**
 2. 助教的环境为科大正版软件下的 Win10 镜像，可能存在因系统版本/电脑配置不同导致的配置不成功，也可能存在因助教水平不足造成的疏漏，欢迎各位同学指出，本文也将在 <https://ics.liuly.moe> 进行及时的更新。
+3. 请配置有问题的各位一定看一下“注意事项“部分。
 
 ## 下载 VSCode
 
@@ -61,7 +62,7 @@
 
 ![](../images/vscode_tutorial/program-output.png)
 
-同时可以注意到 VSCode 自动生成了 `.vscode` 目录，里面的 `task.json` 内容是这样：
+同时可以注意到 VSCode 自动生成了 `.vscode` 目录，里面的 `tasks.json` 内容是这样：
 
 ![](../images/vscode_tutorial/task.png)
 
@@ -74,8 +75,73 @@ VSCode 比命令行强大的功能在于图形化的 GDB 调试，可以直接�
 ## 注意事项
 
 1. 所有路径都**尽量不要出现中文**。
+
 2. 配置完成后只能在该 workspace 下进行编译，如果新建了 workspace 需要重复上述过程。
+
 3. 如果需要编译 C++ 文件，把 command 里的 `gcc` 改成 `g++`。
+
+4. 如果还是有问题，我提供一组 `launch.json` 和 `tasks.json`，请大家根据注释查看是否需要修改部分配置项（如果 MinGW 已经加入环境变量应该可以直接使用），之后它们拖进 `.vscode` 文件夹即可。
+
+    `launch.json`：
+
+    ```json
+    {
+      "version": "2.0.0",
+      "configurations": [
+        {
+          "name": "(gdb) Launch",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+          "args": [], // 程序调试时传递给程序的命令行参数，新手建议放空
+          "stopAtEntry": false,
+          "cwd": "${workspaceFolder}",
+          "environment": [],
+          "externalConsole": false, // 调试时是否显示控制台窗口，建议设为 false
+          "MIMode": "gdb",
+          "miDebuggerPath": "gdb.exe", // MinGW 已经加入环境变量就不用改，否则要改成你 gdb 的路径
+          "preLaunchTask": "compile",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": false
+            }
+          ]
+        }
+      ]
+    }
+    ```
+
+    `tasks.json`：
+
+    ```json
+    {
+      "version": "2.0.0",
+      "tasks": [
+        {
+          "type": "cppbuild",
+          "label": "compile", // 跟 launch.json 里面对应
+          "command": "gcc.exe", // MinGW 已经加入环境变量就不用改，否则要改成你 gcc 的路径，C++ 就改成 g++
+          "args": [
+            "-g", // 加该参数才能使用 GDB 调试
+            "${file}",
+            "-o",
+            "${fileDirname}\\${fileBasenameNoExtension}.exe"
+          ],
+          "options": {
+            "cwd": "${fileDirname}"
+          },
+          "problemMatcher": ["$gcc"],
+          "group": {
+            "kind": "build",
+            "isDefault": true
+          },
+          "detail": "调试器生成的任务。"
+        }
+      ]
+    }
+    ```
 
 ## 后话
 
