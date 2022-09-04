@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { nav } from './utils/nav'
+import { sidebar } from './utils/sidebar'
 
 /**
  * 参考：https://vitepress.vuejs.org/config/app-configs.html
@@ -19,6 +20,7 @@ const config = defineConfig({
       },
     ],
     nav,
+    sidebar,
   },
 })
 
