@@ -126,7 +126,7 @@ const bench = () => {
     </div>
 
     <div class="form-item">
-      <span class="label">启用调试模式（支持追踪 pc 和寄存器变化）</span>
+      <span class="label">调试模式</span>
       <f-switch v-model="log" />
     </div>
 

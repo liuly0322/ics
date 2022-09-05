@@ -245,7 +245,6 @@ const LC3Util = {
 export default class {
   constructor() {
     // Create and initialize memory; load from OS if possible
-    this.totalInstruction = 0
     this.memory = new Array(0x10000)
     for (var i = 0; i < this.memory.length; i++) {
       var osEntry = lc3os[i]
@@ -339,7 +338,6 @@ export default class {
   // Stages of the instruction cycle
   nextInstruction() {
     // Perform the instruction cycle.
-    this.totalInstruction += 1
     this.fetch()
     var op = this.decode(this.ir)
     var address = this.evaluateAddress(this.pc, op)

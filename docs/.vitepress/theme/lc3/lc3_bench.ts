@@ -1,5 +1,6 @@
 import as from './lc3_as'
 import hexbin from './lc3_hexbin'
+import type { AssemblyResult, Event } from './lc3_core'
 import Core from './lc3_core'
 
 class CaseResult {
@@ -24,7 +25,8 @@ function caseTest(
   log: boolean,
   testcase: string,
   expectedAnsFunc: (lc3: Core, testcase: string) => number,
-  actualAnsFunc: (lc3: Core) => number):
+  actualAnsFunc: (lc3: Core) => number,
+):
   CaseResult {
   const expectedAns = expectedAnsFunc(lc3, testcase)
   const logs: string[] = []
@@ -32,30 +34,44 @@ function caseTest(
   lc3.pc = 0x3000
   lc3.psr = 0x8002
 
-  let cnt
-  for (cnt = 0; cnt < limit; cnt++) {
-    let regs: number[]
-    const op = lc3.decode(lc3.getMemory(lc3.pc))
-
-    if (log) {
-      const curInstr = lc3.instructionAddressToString(lc3.pc)
-      logs.push(`x${lc3.pc.toString(16)}：${curInstr}`)
-      regs = Array.from(lc3.r)
+  const eventCallback = (event: Event) => {
+    let log = ''
+    switch (event.type) {
+      case 'exception':
+        log = `异常：${event.exception}`
+        break
+      case 'memset':
+        log = `x${event.address.toString(16)} 变为 ${event.newValue}`
+        break
+      case 'regset':
+        if (typeof event.register == 'number')
+          log = `R${event.register} 变为 ${event.newValue}`
     }
+    if (log) {
+      const last = logs.pop()!
+      logs.push(`${last} (${log})`)
+    }
+  }
+  if (log)
+    lc3.addListener(eventCallback)
 
-    if ((op.raw >= 61440 && op.raw <= 61695) || op.raw === 0)
+  const performInstructionCycle = log
+    ? () => {
+        const curInstr = lc3.instructionAddressToString(lc3.pc)
+        logs.push(`x${lc3.pc.toString(16)}：${curInstr}`)
+        lc3.nextInstruction()
+      }
+    : () => {
+        lc3.nextInstruction()
+      }
+
+  let cnt = 0
+  for (; cnt < limit; cnt++) {
+    const op = lc3.memory[lc3.pc]
+    if ((op >= 0xF000 && op <= 0xF0FF) || op === 0)
       break
 
-    lc3.nextInstruction()
-
-    if (log) {
-      lc3.r.forEach((v: number, i: number) => {
-        if (v !== regs[i]) {
-          const log = logs.pop()
-          logs.push(`${log}，R${i} 由 ${regs[i]} 变为 ${v}`)
-        }
-      })
-    }
+    performInstructionCycle()
   }
 
   const actualAns = actualAnsFunc(lc3)
@@ -87,7 +103,7 @@ export default function lc3bench(
   }
   else if (!('error' in hexbinResult)) {
     if (hexbinResult.orig !== 0x3000) {
-      const hexbinResult = hexbin(`0011000000000000\n${code}`)
+      const hexbinResult = hexbin(`0011000000000000\n${code}`) as AssemblyResult
       lc3.loadAssembled(hexbinResult)
     }
     else {
@@ -128,7 +144,13 @@ export default function lc3bench(
     testcase => caseTest(lc3, instrLimit, log, testcase, expectedAnsFunc, actualAnsFunc),
   )
 
-  // 分析运行结果
+  const totalCases = caseResults.length
+  const passCases = caseResults.filter(testcase => testcase.expectedAns === testcase.actualAns).length
+  const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.instructions, 0)
+
+  result.passes = `${passCases} / ${totalCases} 个通过测试用例`
+  result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
+
   caseResults.forEach((testcase) => {
     if (testcase.instructions >= instrLimit) {
       result.logs!.push(
@@ -148,13 +170,6 @@ export default function lc3bench(
     if (log)
       result.logs!.push(...testcase.logs)
   })
-
-  const totalCases = caseResults.length
-  const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.instructions, 0)
-  result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
-
-  const passCases = caseResults.filter(testcase => testcase.expectedAns === testcase.actualAns).length
-  result.passes = `${passCases} / ${totalCases} 个通过测试用例`
 
   return result
 }
