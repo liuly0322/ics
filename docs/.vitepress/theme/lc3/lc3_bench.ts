@@ -2,26 +2,35 @@ import as from './lc3_as'
 import hexbin from './lc3_hexbin'
 import Core from './lc3_core'
 
-class CaseResult {
-  public testcase
-  public expectedResult
-  public state
-  public yourResult
+class SimResult {
+  instructions = 0
+  logs: string[]
+  constructor(instructions: number, logs?: string[]) {
+    this.instructions = instructions
+    this.logs = logs ?? []
+  }
+}
+
+class CaseResult extends SimResult {
+  testcase
+  expectedResult
+  yourResult
   constructor(
     testcase: string,
     expectedResult: number,
-    state: string[],
+    instructions: number,
+    logs: string[],
     yourResult: number,
   ) {
+    super(instructions, logs)
     this.testcase = testcase
     this.expectedResult = expectedResult
-    this.state = state
     this.yourResult = yourResult
   }
 }
 
 // 进行单个样例的测试，返回总用指令数以及 log（如果有）
-function caseTest(lc3: Core, limit: number, log: boolean): string[] {
+function caseTest(lc3: Core, limit: number, log: boolean): SimResult {
   const logs: string[] = []
   lc3.pc = 0x3000
   lc3.psr = 0x8002
@@ -30,11 +39,11 @@ function caseTest(lc3: Core, limit: number, log: boolean): string[] {
     const op = lc3.decode(lc3.getMemory(lc3.pc))
     if (log) {
       const curInstr = lc3.instructionAddressToString(lc3.pc)
-      logs.push(`执行 x${lc3.pc.toString(16)}：${curInstr}`)
+      logs.push(`x${lc3.pc.toString(16)}：${curInstr}`)
       regs = Array.from(lc3.r)
     }
     if ((op.raw >= 61440 && op.raw <= 61695) || op.raw === 0)
-      return log ? [String(cnt), ...logs] : [String(cnt)]
+      return new SimResult(cnt, logs)
 
     lc3.nextInstruction()
     if (log) {
@@ -46,7 +55,13 @@ function caseTest(lc3: Core, limit: number, log: boolean): string[] {
       })
     }
   }
-  return log ? [String(limit), ...logs] : [String(limit)]
+  return new SimResult(limit, logs)
+}
+
+export interface BenchResult {
+  state?: 'assembly' | 'machine'
+  passes?: string
+  logs?: string[]
 }
 
 export default function lc3bench(
@@ -56,15 +71,15 @@ export default function lc3bench(
   testcases: string[],
   instrLimit: number,
   log: boolean,
-): string[] {
-  const ans = ['']
+): BenchResult {
+  const result: BenchResult = { logs: [] }
 
   const lc3 = new Core()
   const asResult = as(code)
   const hexbinResult = hexbin(code)
   if (!('error' in asResult)) {
     lc3.loadAssembled(asResult)
-    ans.push('(作为汇编代码处理)')
+    result.state = 'assembly'
   }
   else if (!('error' in hexbinResult)) {
     if (hexbinResult.orig !== 0x3000) {
@@ -74,10 +89,14 @@ export default function lc3bench(
     else {
       lc3.loadAssembled(hexbinResult)
     }
-    ans.push('(作为机器码处理)')
+    result.state = 'machine'
   }
   else {
-    return ['代码无法被识别为正确的机器码或者汇编代码...', `机器码：${hexbinResult.error}`, `汇编：${asResult.error}`]
+    return {
+      logs: ['代码无法被识别为正确的机器码或者汇编代码',
+        `机器码：${hexbinResult.error}`,
+        `汇编：${asResult.error}`],
+    }
   }
 
   let expectedResult: (arg0: string) => number
@@ -87,7 +106,7 @@ export default function lc3bench(
     eval(`expectedResult = ${testCode}`)
   }
   catch {
-    return ['评测函数编写出现语法错误...']
+    return { logs: ['评测函数编写出现语法错误'] }
   }
 
   try {
@@ -95,51 +114,54 @@ export default function lc3bench(
     eval(`yourResult = ${ansCode}`)
   }
   catch {
-    return ['获取答案函数编写出现语法错误...']
+    return { logs: ['答案函数编写出现语法错误'] }
   }
 
   if (log)
     testcases = [testcases[0]]
 
   const caseResults = testcases.map(
-    testcase =>
-      new CaseResult(
+    (testcase) => {
+      const expected = expectedResult(testcase)
+      const simResult = caseTest(lc3, instrLimit, log)
+      const yourAns = yourResult()
+      return new CaseResult(
         testcase,
-        expectedResult(testcase),
-        caseTest(lc3, instrLimit, log),
-        yourResult(),
-      ),
+        expected,
+        simResult.instructions,
+        simResult.logs,
+        yourAns,
+      )
+    },
   )
 
   // 分析运行结果
-  let totalInstructions = 0
-  let passCases = 0
-  caseResults.forEach((res) => {
-    const instructions = Number(res.state[0])
-    totalInstructions += instructions
-    if (instructions >= instrLimit) {
-      ans.push(
-        `异常样例: ${res.testcase} 超出最大执行指令数，可以尝试调整设置，或者可能发生了死循环`,
+  caseResults.forEach((testcase) => {
+    if (testcase.instructions >= instrLimit) {
+      result.logs!.push(
+        `异常 ${testcase.testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
       )
     }
-    else if (res.expectedResult === res.yourResult) {
-      passCases++
-      ans.push(
-        `通过样例: ${res.testcase}. 指令数: ${instructions}, 预期结果: ${res.expectedResult}, 你的输出: ${res.yourResult}`,
+    else if (testcase.expectedResult === testcase.yourResult) {
+      result.logs!.push(
+        `通过 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.yourResult}`,
       )
     }
     else {
-      ans.push(
-        `失败样例: ${res.testcase}. 指令数: ${instructions}, 预期结果: ${res.expectedResult}, 你的输出: ${res.yourResult}`,
+      result.logs!.push(
+        `失败 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.yourResult}, 预期: ${testcase.expectedResult}`,
       )
     }
     if (log)
-      ans.push(...res.state.slice(1))
+      result.logs!.push(...testcase.logs)
   })
 
   const totalCases = caseResults.length
-  ans.push(`平均指令数: ${totalInstructions / totalCases}`)
-  ans[0] = `通过: ${passCases} / ${totalCases}`
+  const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.instructions, 0)
+  result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
 
-  return ans
+  const passCases = caseResults.filter(testcase => testcase.expectedResult === testcase.yourResult).length
+  result.passes = `${passCases} / ${totalCases} 个通过测试用例`
+
+  return result
 }

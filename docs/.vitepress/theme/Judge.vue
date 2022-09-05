@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { FMessage } from 'fighting-design'
 import { getPreset, presets } from './lc3/lc3_preset'
+import type { BenchResult } from './lc3/lc3_bench'
 import lc3Bench from './lc3/lc3_bench'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const instrLimit = ref(100000)
 const lab = ref('自定义')
 const model = ref(getPreset(lab.value))
 const code = ref('')
 const log = ref(false)
-const outputs = ref([] as string[])
+const outputs = ref({} as BenchResult)
 
 const cases = computed(() =>
   model.value.testCases.split(',').map((s: string) => s.trim()).filter(Boolean),
@@ -25,7 +26,7 @@ watch(code, (cur) => {
 
 watch(lab, (cur) => {
   model.value = getPreset(cur)
-  outputs.value = []
+  outputs.value = {}
 })
 
 watch(log, (cur) => {
@@ -38,7 +39,7 @@ watch(log, (cur) => {
 })
 
 const bench = () => {
-  outputs.value = []
+  outputs.value = {}
 
   const errors = [[!code.value, '待测代码'],
     [!model.value.testCode, '评测函数'],
@@ -131,10 +132,11 @@ const bench = () => {
       </f-button>
     </div>
 
-    <div v-if="outputs.length" class="card" style="margin-top: 2em">
-      <span class="label">评测结果</span>
+    <div v-if="Object.keys(outputs).length" class="card" style="margin-top: 2em">
+      <span class="label">{{ outputs.state === 'assembly' ? '汇编' : outputs.state === 'machine' ? '机器码' : '' }}评测</span>
+      {{ outputs.passes }}
       <ul>
-        <li v-for="output in outputs" :key="output">
+        <li v-for="output in outputs.logs" :key="output">
           {{ output }}
         </li>
       </ul>
