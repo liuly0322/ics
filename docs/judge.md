@@ -34,7 +34,7 @@ const input = parseInt(testcase)
 // 初始化寄存器
 lc3.r[0] = input
 // 返回预计的正确答案，最好是数字
-return input + input
+return (input + input) % 65536
 ```
 
 答案函数体示例：

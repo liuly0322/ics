@@ -2,50 +2,52 @@ import as from './lc3_as'
 import hexbin from './lc3_hexbin'
 import Core from './lc3_core'
 
-class SimResult {
-  instructions = 0
-  logs: string[]
-  constructor(instructions: number, logs?: string[]) {
-    this.instructions = instructions
-    this.logs = logs ?? []
-  }
-}
-
-class CaseResult extends SimResult {
-  testcase
-  expectedResult
-  yourResult
+class CaseResult {
   constructor(
-    testcase: string,
-    expectedResult: number,
-    instructions: number,
-    logs: string[],
-    yourResult: number,
+    public testcase: string,
+    public expectedAns: number,
+    public instructions: number,
+    public logs: string[],
+    public actualAns: number,
   ) {
-    super(instructions, logs)
+    this.instructions = instructions
+    this.logs = logs
     this.testcase = testcase
-    this.expectedResult = expectedResult
-    this.yourResult = yourResult
+    this.expectedAns = expectedAns
+    this.actualAns = actualAns
   }
 }
 
-// 进行单个样例的测试，返回总用指令数以及 log（如果有）
-function caseTest(lc3: Core, limit: number, log: boolean): SimResult {
+function caseTest(
+  lc3: Core,
+  limit: number,
+  log: boolean,
+  testcase: string,
+  expectedAnsFunc: (lc3: Core, testcase: string) => number,
+  actualAnsFunc: (lc3: Core) => number):
+  CaseResult {
+  const expectedAns = expectedAnsFunc(lc3, testcase)
   const logs: string[] = []
+
   lc3.pc = 0x3000
   lc3.psr = 0x8002
-  for (let cnt = 0; cnt <= limit; cnt++) {
+
+  let cnt
+  for (cnt = 0; cnt < limit; cnt++) {
     let regs: number[]
     const op = lc3.decode(lc3.getMemory(lc3.pc))
+
     if (log) {
       const curInstr = lc3.instructionAddressToString(lc3.pc)
       logs.push(`x${lc3.pc.toString(16)}：${curInstr}`)
       regs = Array.from(lc3.r)
     }
+
     if ((op.raw >= 61440 && op.raw <= 61695) || op.raw === 0)
-      return new SimResult(cnt, logs)
+      break
 
     lc3.nextInstruction()
+
     if (log) {
       lc3.r.forEach((v: number, i: number) => {
         if (v !== regs[i]) {
@@ -55,7 +57,9 @@ function caseTest(lc3: Core, limit: number, log: boolean): SimResult {
       })
     }
   }
-  return new SimResult(limit, logs)
+
+  const actualAns = actualAnsFunc(lc3)
+  return new CaseResult(testcase, expectedAns, cnt, logs, actualAns)
 }
 
 export interface BenchResult {
@@ -99,11 +103,11 @@ export default function lc3bench(
     }
   }
 
-  let expectedResult: (lc3: Core, testcase: string) => number
-  let yourResult: (lc3: Core) => number
+  let expectedAnsFunc: (lc3: Core, testcase: string) => number
+  let actualAnsFunc: (lc3: Core) => number
   try {
     // eslint-disable-next-line no-new-func
-    expectedResult = Function('lc3', 'testcase', testCode) as (lc3: Core, testcase: string) => number
+    expectedAnsFunc = Function('lc3', 'testcase', testCode) as (lc3: Core, testcase: string) => number
   }
   catch {
     return { logs: ['评测函数编写出现语法错误'] }
@@ -111,7 +115,7 @@ export default function lc3bench(
 
   try {
     // eslint-disable-next-line no-new-func
-    yourResult = Function('lc3', ansCode) as (lc3: Core) => number
+    actualAnsFunc = Function('lc3', ansCode) as (lc3: Core) => number
   }
   catch {
     return { logs: ['答案函数编写出现语法错误'] }
@@ -121,18 +125,7 @@ export default function lc3bench(
     testcases = [testcases[0]]
 
   const caseResults = testcases.map(
-    (testcase) => {
-      const expected = expectedResult(lc3, testcase)
-      const simResult = caseTest(lc3, instrLimit, log)
-      const yourAns = yourResult(lc3)
-      return new CaseResult(
-        testcase,
-        expected,
-        simResult.instructions,
-        simResult.logs,
-        yourAns,
-      )
-    },
+    testcase => caseTest(lc3, instrLimit, log, testcase, expectedAnsFunc, actualAnsFunc),
   )
 
   // 分析运行结果
@@ -142,14 +135,14 @@ export default function lc3bench(
         `异常 ${testcase.testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
       )
     }
-    else if (testcase.expectedResult === testcase.yourResult) {
+    else if (testcase.expectedAns === testcase.actualAns) {
       result.logs!.push(
-        `通过 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.yourResult}`,
+        `通过 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.actualAns}`,
       )
     }
     else {
       result.logs!.push(
-        `失败 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.yourResult}, 预期: ${testcase.expectedResult}`,
+        `失败 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.actualAns}, 预期: ${testcase.expectedAns}`,
       )
     }
     if (log)
@@ -160,7 +153,7 @@ export default function lc3bench(
   const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.instructions, 0)
   result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
 
-  const passCases = caseResults.filter(testcase => testcase.expectedResult === testcase.yourResult).length
+  const passCases = caseResults.filter(testcase => testcase.expectedAns === testcase.actualAns).length
   result.passes = `${passCases} / ${totalCases} 个通过测试用例`
 
   return result
