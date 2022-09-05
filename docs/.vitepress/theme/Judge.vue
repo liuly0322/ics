@@ -13,7 +13,11 @@ const log = ref(false)
 const outputs = ref({} as BenchResult)
 
 const cases = computed(() =>
-  model.value.testCases.split(',').map((s: string) => s.trim()).filter(Boolean),
+  model.value.testCases
+    .replace(/，/g, ',')
+    .split(',')
+    .map((s: string) => s.trim())
+    .filter(Boolean),
 )
 
 onMounted(() => {
@@ -91,7 +95,7 @@ const bench = () => {
     </div>
 
     <div class="form-item">
-      <span class="label">测试样例，样例之间以英文逗号分割</span>
+      <span class="label">测试样例，样例之间以逗号分割</span>
       <input
         v-model="model.testCases"
         style="border: 0.5px solid; padding: 0.5em; margin: 4px; box-sizing: border-box; width: 100%"

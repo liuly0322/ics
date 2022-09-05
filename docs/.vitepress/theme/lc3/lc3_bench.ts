@@ -99,19 +99,19 @@ export default function lc3bench(
     }
   }
 
-  let expectedResult: (arg0: string) => number
-  let yourResult: () => number
+  let expectedResult: (lc3: Core, testcase: string) => number
+  let yourResult: (lc3: Core) => number
   try {
-    // eslint-disable-next-line no-eval
-    eval(`expectedResult = ${testCode}`)
+    // eslint-disable-next-line no-new-func
+    expectedResult = Function('lc3', 'testcase', testCode) as (lc3: Core, testcase: string) => number
   }
   catch {
     return { logs: ['评测函数编写出现语法错误'] }
   }
 
   try {
-    // eslint-disable-next-line no-eval
-    eval(`yourResult = ${ansCode}`)
+    // eslint-disable-next-line no-new-func
+    yourResult = Function('lc3', ansCode) as (lc3: Core) => number
   }
   catch {
     return { logs: ['答案函数编写出现语法错误'] }
@@ -122,9 +122,9 @@ export default function lc3bench(
 
   const caseResults = testcases.map(
     (testcase) => {
-      const expected = expectedResult(testcase)
+      const expected = expectedResult(lc3, testcase)
       const simResult = caseTest(lc3, instrLimit, log)
-      const yourAns = yourResult()
+      const yourAns = yourResult(lc3)
       return new CaseResult(
         testcase,
         expected,
