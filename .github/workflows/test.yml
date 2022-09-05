@@ -15,7 +15,9 @@ jobs:
         with:
           version: latest
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: lint
         run: pnpm i && pnpm lint
