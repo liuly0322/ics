@@ -31,9 +31,6 @@ function caseTest(
   const expectedAns = expectedAnsFunc(lc3, testcase)
   const logs: string[] = []
 
-  lc3.pc = 0x3000
-  lc3.psr = 0x8002
-
   const eventCallback = (event: Event) => {
     let log = ''
     switch (event.type) {
@@ -96,14 +93,14 @@ export default function lc3bench(
 
   const lc3 = new Core()
   const asResult = as(code)
-  const hexbinResult = hexbin(code)
+  let hexbinResult = hexbin(code)
   if (!('error' in asResult)) {
     lc3.loadAssembled(asResult)
     result.state = 'assembly'
   }
   else if (!('error' in hexbinResult)) {
     if (hexbinResult.orig !== 0x3000) {
-      const hexbinResult = hexbin(`0011000000000000\n${code}`) as AssemblyResult
+      hexbinResult = hexbin(`0011000000000000\n${code}`) as AssemblyResult
       lc3.loadAssembled(hexbinResult)
     }
     else {
@@ -140,9 +137,14 @@ export default function lc3bench(
   if (log)
     testcases = [testcases[0]]
 
-  const caseResults = testcases.map(
-    testcase => caseTest(lc3, instrLimit, log, testcase, expectedAnsFunc, actualAnsFunc),
-  )
+  const caseResults = testcases.map((testcase) => {
+    const lc3 = new Core()
+    if (result.state === 'assembly')
+      lc3.loadAssembled(asResult as AssemblyResult)
+    else
+      lc3.loadAssembled(hexbinResult as AssemblyResult)
+    return caseTest(lc3, instrLimit, log, testcase, expectedAnsFunc, actualAnsFunc)
+  })
 
   const totalCases = caseResults.length
   const passCases = caseResults.filter(testcase => testcase.expectedAns === testcase.actualAns).length

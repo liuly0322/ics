@@ -245,10 +245,9 @@ const LC3Util = {
 export default class {
   constructor() {
     // Create and initialize memory; load from OS if possible
-    this.memory = new Array(0x10000)
-    for (var i = 0; i < this.memory.length; i++) {
-      var osEntry = lc3os[i]
-      this.memory[i] = osEntry === undefined ? 0 : osEntry
+    this.memory = new Array(0x10000).fill(0)
+    for (const osEntry in lc3os) {
+      this.memory[osEntry] = lc3os[osEntry]
     }
 
     // Listeners for when registers, memory, etc. are changed
@@ -263,7 +262,7 @@ export default class {
     }
 
     // Create and initialize registers
-    this.r = new Array(8)
+    this.r = new Array(8).fill(0)
     this.specialRegisters = ['pc', 'ir', 'psr']
     this.resetAllRegisters()
 
