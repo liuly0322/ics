@@ -14,14 +14,26 @@ LC3 评测使用 <https://github.com/wchargin/lc3web>, 参照原项目协议
 
 - Vitepress
 - fighting-design
-
-等
+- ......
 
 ## 部署
 
-依赖：npm, pnpm（略）
+> 环境准备：[Node.js](http://nodejs.cn/download/)（版本建议 v16 以上）
 
-clone 本仓库并安装所需的库
+clone 本仓库
+
+```
+git clone --depth=1 -b main https://github.com/liuly0322/ics.git
+cd ics  # 进入目录
+```
+
+安装 pnpm（已安装的可以跳过）
+
+```
+npm install pnpm -g
+```
+
+使用 pnpm 安装本项目所需依赖
 
 ```
 pnpm install
