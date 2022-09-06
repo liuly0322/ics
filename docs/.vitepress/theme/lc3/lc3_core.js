@@ -264,7 +264,7 @@ export default class {
     // Create and initialize registers
     this.r = new Array(8).fill(0)
     this.specialRegisters = ['pc', 'ir', 'psr']
-    this.resetAllRegisters()
+    this.resetSpecialRegisters()
 
     // Dictionaries for linking addresses and labels
     this.labelToAddress = {}
@@ -843,13 +843,7 @@ export default class {
     }
     return false
   }
-  resetNumericRegisters() {
-    for (var i = 0; i < this.r.length; i++) {
-      this.r[i] = 0
-    }
-  }
-  resetAllRegisters() {
-    this.resetNumericRegisters()
+  resetSpecialRegisters() {
     this.pc = 0x3000
     this.ir = 0
     this.psr = 0x8002
