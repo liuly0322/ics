@@ -59,8 +59,7 @@ export default class {
   writeMemory(address: number, data: number): void
   getRegister(register: number | string): number
   setRegister(register: number | string, value: number): boolean
-  resetNumericRegisters(): void
-  resetAllRegisters(): void
+  resetSpecialRegisters(): void
   formatConditionCode(): 'Invalid' | 'P' | 'N' | 'Z'
   isRunning(): boolean
   halt(): void

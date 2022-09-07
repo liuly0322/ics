@@ -1,6 +1,4 @@
-# 计算机系统概论 FA22
-
-## 说明
+# 计算系统概论 FA22
 
 课程组首页： <https://acsa.ustc.edu.cn/ics>
 

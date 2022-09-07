@@ -111,7 +111,7 @@ const bench = () => {
       <span class="label">评测函数</span>
       <textarea
         v-model="model.testCode" rows="10"
-        placeholder="一个 js 函数，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
+        placeholder="一个 js 函数的函数体，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
         style="border: 0.5px solid; margin: 4px"
       />
     </div>
@@ -120,7 +120,7 @@ const bench = () => {
       <span class="label">答案函数</span>
       <textarea
         v-model="model.ansCode" rows="10"
-        placeholder="一个 js 函数，返回测试结束后读取 lc3 模拟器的哪个变量（如 lc3.r 和 lc3.memory 数组中的某一项）的值作为用户程序运行的输出（即评测依据）"
+        placeholder="一个 js 函数的函数体，返回测试结束后读取 lc3 模拟器的哪个变量（如 lc3.r 和 lc3.memory 数组中的某一项）的值作为用户程序运行的输出（即评测依据）"
         style="border: 0.5px solid; margin: 4px"
       />
     </div>
@@ -151,7 +151,8 @@ const bench = () => {
 <style>
 .card {
   border: #e5e5e5 solid 1px;
-  padding: 20px
+  margin: 1em 0;
+  padding: 1.5em
 }
 
 .form-item {
@@ -160,7 +161,7 @@ const bench = () => {
 
 .label {
   display: block;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5em
 }
 
 textarea {

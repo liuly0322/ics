@@ -63,7 +63,7 @@ function caseTest(
       }
 
   let cnt = 0
-  for (; cnt < limit; cnt++) {
+  for (; cnt <= limit; cnt++) {
     const op = lc3.memory[lc3.pc]
     if ((op >= 0xF000 && op <= 0xF0FF) || op === 0)
       break
@@ -154,7 +154,7 @@ export default function lc3bench(
   result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
 
   caseResults.forEach((testcase) => {
-    if (testcase.instructions >= instrLimit) {
+    if (testcase.instructions > instrLimit) {
       result.logs!.push(
         `异常 ${testcase.testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
       )
