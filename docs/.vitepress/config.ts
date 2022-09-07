@@ -10,7 +10,7 @@ import { sidebar } from './utils/sidebar'
 
 const config = defineConfig({
   title: 'ICS Fall 2022',
-  description: 'USTC ICS CS1002A.02 Fall 2022 Homepage',
+  description: 'USTC ICS CS1002A.03 Fall 2022 Homepage',
   lang: 'zh-CN',
   lastUpdated: true,
   themeConfig: {
