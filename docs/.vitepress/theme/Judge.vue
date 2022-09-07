@@ -151,7 +151,8 @@ const bench = () => {
 <style>
 .card {
   border: #e5e5e5 solid 1px;
-  padding: 20px
+  margin: 1em 0;
+  padding: 1.5em
 }
 
 .form-item {
@@ -160,7 +161,7 @@ const bench = () => {
 
 .label {
   display: block;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5em
 }
 
 textarea {
