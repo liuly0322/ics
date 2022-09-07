@@ -1,4 +1,6 @@
-# lc3 模拟评测
+# lc3 评测
+
+<Judge />
 
 ## 说明
 
@@ -16,7 +18,7 @@
 
 ## 自定义评测功能说明
 
-（如果只需要评测实验可跳过）
+（如果只需要评测实验可略过）
 
 用户需要补全评测函数和答案函数两个函数的函数体
 
@@ -45,10 +47,6 @@ return (input + input) % 65536
 // 返回评测结束后获取到的答案
 return lc3.r[7]
 ```
-
-## 评测
-
-<Judge />
 
 <script setup>
 import Judge from '@theme/Judge.vue'
