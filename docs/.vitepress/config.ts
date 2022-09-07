@@ -18,7 +18,7 @@ const config = defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/liuly0322',
+        link: 'https://github.com/liuly0322/ics',
       },
     ],
     editLink: {
