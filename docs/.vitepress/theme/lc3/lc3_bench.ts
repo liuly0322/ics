@@ -19,13 +19,16 @@ class CaseResult {
   }
 }
 
+export type ExpectedAnsFunc = (lc3: Core, testcase: string) => number
+export type ActualAnsFunc = (lc3: Core) => number
+
 function caseTest(
   lc3: Core,
   limit: number,
   log: boolean,
   testcase: string,
-  expectedAnsFunc: (lc3: Core, testcase: string) => number,
-  actualAnsFunc: (lc3: Core) => number,
+  expectedAnsFunc: ExpectedAnsFunc,
+  actualAnsFunc: ActualAnsFunc,
 ):
   CaseResult {
   const expectedAns = expectedAnsFunc(lc3, testcase)
@@ -83,8 +86,8 @@ export interface BenchResult {
 
 export default function lc3bench(
   code: string,
-  testCode: string,
-  ansCode: string,
+  expectedAnsFunc: ExpectedAnsFunc,
+  actualAnsFunc: ActualAnsFunc,
   testcases: string[],
   instrLimit: number,
   log: boolean,
@@ -114,24 +117,6 @@ export default function lc3bench(
         `机器码：${hexbinResult.error}`,
         `汇编：${asResult.error}`],
     }
-  }
-
-  let expectedAnsFunc: (lc3: Core, testcase: string) => number
-  let actualAnsFunc: (lc3: Core) => number
-  try {
-    // eslint-disable-next-line no-new-func
-    expectedAnsFunc = Function('lc3', 'testcase', testCode) as (lc3: Core, testcase: string) => number
-  }
-  catch {
-    return { logs: ['评测函数编写出现语法错误'] }
-  }
-
-  try {
-    // eslint-disable-next-line no-new-func
-    actualAnsFunc = Function('lc3', ansCode) as (lc3: Core) => number
-  }
-  catch {
-    return { logs: ['答案函数编写出现语法错误'] }
   }
 
   if (log)

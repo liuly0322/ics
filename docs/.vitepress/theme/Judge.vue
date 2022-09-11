@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FMessage } from 'fighting-design'
 import { getPreset, presets } from './lc3/lc3_preset'
-import type { BenchResult } from './lc3/lc3_bench'
+import type { ActualAnsFunc, BenchResult, ExpectedAnsFunc } from './lc3/lc3_bench'
 import lc3Bench from './lc3/lc3_bench'
 import { computed, onMounted, ref, watch } from 'vue'
 
@@ -42,15 +42,39 @@ watch(log, (cur) => {
   }
 })
 
+const expectedAnsFunc = computed(() => {
+  try {
+    // eslint-disable-next-line no-new-func
+    return Function('lc3', 'testcase', model.value.testCode) as ExpectedAnsFunc
+  }
+  catch (e) {
+    return String(e)
+  }
+})
+const isValidTestCode = computed(() => typeof expectedAnsFunc.value != 'string')
+
+const actualAnsFunc = computed(() => {
+  try {
+    // eslint-disable-next-line no-new-func
+    return Function('lc3', model.value.ansCode) as ActualAnsFunc
+  }
+  catch (e) {
+    return String(e)
+  }
+})
+const isValidAnsCode = computed(() => typeof actualAnsFunc.value != 'string')
+
 const bench = () => {
   outputs.value = {}
 
-  const errors = [[!code.value, '待测代码'],
-    [!model.value.testCode, '评测函数'],
-    [!model.value.ansCode, '答案函数'],
-    [!cases.value.length, '测试样例']]
+  const errors = [[!cases.value.length, '缺少测试样例'],
+    [!code.value, '缺少待测代码'],
+    [!model.value.testCode, '缺少评测函数'],
+    [!isValidTestCode.value, '评测函数有语法错误'],
+    [!model.value.ansCode, '缺少答案函数'],
+    [!isValidAnsCode.value, '答案函数有语法错误']]
     .filter(err => err[0])
-    .map(err => `缺少${err[1]}，无法评测`)
+    .map(err => err[1])
     .map(err =>
       FMessage({
         message: err,
@@ -63,8 +87,8 @@ const bench = () => {
 
   outputs.value = lc3Bench(
     code.value,
-    model.value.testCode,
-    model.value.ansCode,
+    expectedAnsFunc.value as ExpectedAnsFunc,
+    actualAnsFunc.value as ActualAnsFunc,
     cases.value,
     instrLimit.value,
     log.value,
@@ -111,18 +135,26 @@ const bench = () => {
       <span class="label">评测函数</span>
       <textarea
         v-model="model.testCode" rows="10"
+        :class="typeof expectedAnsFunc == 'string' ? 'border-red' : ''"
         placeholder="一个 js 函数的函数体，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
         style="border: 0.5px solid; margin: 4px"
       />
+      <div v-if="!isValidTestCode" style="color: red">
+        {{ expectedAnsFunc }}
+      </div>
     </div>
 
     <div v-show="lab === '自定义'" class="form-item">
       <span class="label">答案函数</span>
       <textarea
         v-model="model.ansCode" rows="10"
+        :class="typeof actualAnsFunc == 'string' ? 'border-red' : ''"
         placeholder="一个 js 函数的函数体，返回测试结束后读取 lc3 模拟器的哪个变量（如 lc3.r 和 lc3.memory 数组中的某一项）的值作为用户程序运行的输出（即评测依据）"
         style="border: 0.5px solid; margin: 4px"
       />
+      <div v-if="!isValidAnsCode" style="color: red">
+        {{ actualAnsFunc }}
+      </div>
     </div>
 
     <div class="form-item">
@@ -169,5 +201,9 @@ textarea {
   width: 100%;
   padding: 0.5em;
   font-family: Consolas, "Courier New", Courier, FreeMono, monospace
+}
+
+.border-red {
+  border-color: red !important;
 }
 </style>

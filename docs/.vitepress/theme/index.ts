@@ -16,8 +16,8 @@ const sakanaInit = async () => {
   const takina = SakanaWidget.getCharacter('takina')!
   takina.initialState = {
     ...takina.initialState,
-    i: 0.001,
-    d: 1,
+    i: 0.1,
+    d: 0.9,
   }
   SakanaWidget.registerCharacter('takina-slow', takina)
   new SakanaWidget({ character: 'takina-slow' }).mount('#sakana')
