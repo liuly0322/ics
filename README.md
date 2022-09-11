@@ -14,6 +14,7 @@ LC3 评测使用 <https://github.com/wchargin/lc3web>, 参照原项目协议
 
 - Vitepress
 - fighting-design
+- sakana-widget
 - ......
 
 ## 部署
