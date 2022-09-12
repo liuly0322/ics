@@ -2,9 +2,15 @@
 
 <Judge />
 
-## 说明
+## 功能
 
-本工具受到 <https://github.com/wchargin/lc3web> 的启发，可用于 (2022) 年 USTC ICS(CS1002A) 课程的自助评测，支持识别汇编代码或机器码
+本工具受到 [lc3web](https://github.com/wchargin/lc3web) 的启发，可用于 lc3 程序的自助评测及程序调试
+
+预设的每次实验的测试样例仅供参考，<span style="color: #0095d9;">验收实验时可能会增添更多样例</span>，鼓励自行补充测试样例
+
+如果你更偏好本地命令行测试，可以查看 [lc3tools](https://github.com/chiragsakhuja/lc3tools) 项目提供的 [单元测试文档](https://github.com/chiragsakhuja/lc3tools/blob/master/docs/TEST.md) 及该项目 README 中提到的命令行工具的使用
+
+## 使用说明
 
 约定如下：
 
@@ -16,7 +22,7 @@
   - 汇编代码参数需要用英文逗号分割
   - ......
 
-## 自定义评测功能说明
+## 自定义评测
 
 （如果只需要评测实验可略过）
 
@@ -27,15 +33,14 @@
 例如，如果初始输入存储在 R0, 目标是将 R0 + R0 存在 R7，对应的评测函数体示例：
 
 ```js
-// 函数接受两个参数
-// 第一个参数 lc3 用于访问模拟器内部变量
-// 第二个参数 testcase 是输入样例（字符串类型）
+// 可以访问两个参数
+// lc3 为模拟器对象, testcase 为输入样例（字符串类型）
 
 // 字符串转换为数字
 const input = parseInt(testcase)
 // 初始化寄存器
 lc3.r[0] = input
-// 返回预计的正确答案，最好是数字
+// 返回预计的正确答案
 return (input + input) % 65536
 ```
 
@@ -47,6 +52,8 @@ return (input + input) % 65536
 // 返回评测结束后获取到的答案
 return lc3.r[7]
 ```
+
+两个函数的返回值需要保持类型一致
 
 <script setup>
 import Judge from '@theme/Judge.vue'
