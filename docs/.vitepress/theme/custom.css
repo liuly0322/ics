@@ -1,23 +1,32 @@
 .vp-doc a {
-    word-wrap: break-word
+  word-wrap: break-word
 }
 
 html.dark .f-message {
-    background: #333;
-    color: #fff;
-    box-shadow: #222222 1px 1px 7px, #222222 -1px -1px 7px
+  background: #333;
+  color: #fff;
+  box-shadow: #222222 1px 1px 7px, #222222 -1px -1px 7px
 }
 
 #sakana {
-    display: none;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    z-index: 20
+  display: none;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 20
 }
 
 @media screen and (min-width: 1280px) {
-    #sakana {
-      display: block
-    }
+  #sakana {
+    display: block
   }
+}
+
+mjx-container>svg {
+  display: inline;
+}
+
+mjx-container>svg[display="true"] {
+  display: block;
+  margin: auto;
+}

@@ -1,12 +1,15 @@
 import { defineConfig } from 'vitepress'
 import { nav } from './utils/nav'
 import { sidebar } from './utils/sidebar'
+import mathjax3 from 'markdown-it-mathjax3'
 
 /**
  * 参考：https://vitepress.vuejs.org/config/app-configs.html
  *
  * 修改这里需要重启项目才可以生效
  */
+
+const customElements = ['mjx-container']
 
 const config = defineConfig({
   title: 'ICS Fall 2022',
@@ -27,6 +30,18 @@ const config = defineConfig({
     },
     nav,
     sidebar,
+  },
+  markdown: {
+    config: (md) => {
+      md.use(mathjax3)
+    },
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: tag => customElements.includes(tag),
+      },
+    },
   },
 })
 

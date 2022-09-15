@@ -12,6 +12,7 @@
     "@antfu/eslint-config": "^0.26.3",
     "eslint": "^8.23.0",
     "fighting-design": "0.6.3-alpha.4",
+    "markdown-it-mathjax3": "^4.3.1",
     "sakana-widget": "^2.3.0",
     "vite": "^3.0.8",
     "vitepress": "1.0.0-alpha.10",
