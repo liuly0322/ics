@@ -6,7 +6,7 @@ export const sidebar = {
         { text: '课程资源', link: '/resource/ics' },
         { text: 'CS 资源', link: '/resource/cs' },
         { text: 'vscode 配置', link: '/resource/vscode' },
-        { text: '数据表示', link: '/resource/data' },
+        { text: '数据的位表示', link: '/resource/data' },
       ],
     },
   ],
