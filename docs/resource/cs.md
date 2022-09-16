@@ -2,6 +2,8 @@
 
 - 一个很好的国外名校 CS 课程整理网站：<https://csdiy.wiki>
 - 中文技术文档教学网站：[菜鸟教程](https://www.runoob.com/)
+- 学校 Vlab 虚拟机平台：<https://vlab.ustc.edu.cn/>
+- Linux 101 入门教程：<https://101.ustclug.org/>
 
 CS 入门：
 
