@@ -10,5 +10,5 @@
 ## 课程通知
 
 - 暂无讨论课
-- [作业一](/homework/hw1.html)已公布，DDL：
+- [作业一](/homework/hw1.html)已公布，DDL：10.3 23：59
 - 暂无实验

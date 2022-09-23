@@ -4,7 +4,7 @@
 
 - BB 系统提交电子版 PDF，允许手写拍照、latex、markdown、word 等
 
-- DDL：暂未确定
+- DDL：10.3 23：59
 
 - 答案：DDL 后公布
 
