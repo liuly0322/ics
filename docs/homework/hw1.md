@@ -92,7 +92,7 @@ Write the decimal equivalents for the IEEE floating point number below.
 
 a. 10100101 AND 11010101
 
-b. 1001110 OR 110101
+b. 10001110 OR 11110101
 
 c. NOT(11110001) OR NOT(01011010)
 
