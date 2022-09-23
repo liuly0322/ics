@@ -8,6 +8,8 @@
 
 - 答案：DDL 后公布
 
+- 本次作业 [PDF](./pdf/hw1.pdf)
+
 ## T1
 
 > Adapted from P20 1.5
