@@ -34,15 +34,17 @@ d. $a^6$
 
 ## T2
 
-Convert these decimal or binary numbers to **eight-bit** 2's complement binary numbers。
+(1) Convert these decimal numbers to **eight-bit** 2's complement binary numbers.
 
 a. 98
 
 b. -105
 
-c. 110101 (unsigned)
+(2) Convert the following **eight-bit** 2's complement binary numbers to decimal.
 
-d. 0101101 (unsigned)
+c. 01000010
+
+d. 11101111
 
 ## T3
 
@@ -72,7 +74,9 @@ d. 00001
 
 Write IEEE floating point representation of $(4.3)_D$. If you cannot represent accurately, please try to represent a number which has the closest difference to $(4.3)_D$. **(Actually you may just write the first ten digits of the fractional part.)**
 
-> Can you try to write code in C language to confirm your correctness? (Tips: type `float` in C language follows the rule of IEEE floating)
+> Can you try to write code in C language to confirm your correctness? (Tips: type `float` in C language follows the rule of 32bit IEEE floating)
+>
+> What if the exponent bits are all 1? Search for information about that.
 
 ## T6
 
@@ -107,13 +111,22 @@ Express Q2 another way (with only AND)
 
 ## T9
 
-What is the hexadecimal representation of the following numbers?
+Steps to convert ASCII string to base64:
 
-a. $(19580920)_D$  
+1. Write the ASCII string in bits.
+2. Divide each 24 bits into one group. In each group, divide the bits into 4 subgroups and convert each subgroup using the following rule:
+   - 0-25 corresponds to A-Z
+   - 26-51 corresponds to a-z
+   - 52-61 corresponds to 0-9
+   - 62 corresponds to + and 63 corresponds to /.
+3. If the subgroup is less than 6 bits, add 0 to its lower position.
+4. If the last group is 8 bits, add "==" to the end of the encoded string. If the last subgroup is 16 bits, add just one "=".
 
-b. 754.625 (Convert the 32-bit IEEE floating point representation to 8 hexadecimal numbers)
+> For example, in order to convert "M", first write it as binary:01001101. The first subgroup is 010011(19), corresponds to "T". The last subgroup is 010000(added 4 zeros), corresponds to "Q"(16). Since the last group is 8 bits, we should add \"\=\=\" at the end of the encoded string to indicate this. The final base64 encoding is "TQ==".
 
-c. The ASCII string: "ICS"
+(1) Convert ASCII string "\t\n\r" to base64.
+
+(2) Give a example where base64 encoding can be used.
 
 ## T10
 
