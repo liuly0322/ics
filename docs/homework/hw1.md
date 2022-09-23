@@ -8,7 +8,7 @@
 
 - 答案：DDL 后公布
 
-- 本次作业 [PDF](./pdf/hw1.pdf)
+- 本次作业 [PDF](/pdf/hw1.pdf)
 
 ## T1
 
