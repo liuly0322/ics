@@ -76,7 +76,7 @@ Write IEEE floating point representation of $(4.3)_D$. If you cannot represent a
 
 ## T6
 
-Write the decimal quivalents for the IEEE floating point number below.
+Write the decimal equivalents for the IEEE floating point number below.
 
 0 10001001 11111001101001000000000
 
@@ -113,16 +113,16 @@ a. $(19580920)_D$
 
 b. 754.625 (Convert the 32-bit IEEE floating point representation to 8 hexadecimal numbers)
 
-c. The ASCII string："ICS"
+c. The ASCII string: "ICS"
 
 ## T10
 
-What is the largest positive number that can be represented by an IEEE floating point number (Normalized Form).
+What is the largest positive number that can be represented by an IEEE floating point number (Normalized Form)?
 
 ## T11
 
 > Consider the situation: We want to calculate $0.11\times 0.022$; however, we can only calculate integer numbers. How can we do that?
-> Obvioulsy we can calculate $11 \times 22$ and add dot to the number. However, to determine where to put the dot may be difficult. If we can easily transform the value into $1.1\times 10^{-1}$ and $2.2\times 10^{-2}$, just calculate $1.1\times 1.1$ and $10^{-1}\times10^{-2}$ (just add $-1$ and $-2$), then put them together.
+> Obviously we can calculate $11 \times 22$ and add dot to the number. However, determining where to put the dot may be difficult. If we can easily transform the value into $1.1\times 10^{-1}$ and $2.2\times 10^{-2}$, just calculate $1.1\times 1.1$ and $10^{-1}\times10^{-2}$ (just add $-1$ and $-2$), then put them together.
 > However, $0.95\times 0.081$ makes difference, for $9.5\times 8.1=76.95$, which is greater than 10. So we may convert 76.95 into $7.695\times 10^{1}$ and adjust the exponent by increasing 1. So the answer is $7.695\times 10^1\times10^{-3}=7.695\times10^{-2}$.
 
 Now we have two positive float numbers A and B, they follow the rule of 32bit IEEE floating point. For simplicity, we can use A\[0] as the lowest bit of A, A\[31] as the highest, and A\[2:5] as array of A\[4], A\[3] and A\[2], A\[5] is not included. If we attempt to combine two numbers together, we can use big brackets.
@@ -134,7 +134,7 @@ For example: if$A=0\ 11110000\ 00000000\ 00000000\ 0000111$, then $A[0]=1$, $A[3
 
   - you can use mult boxes to multiply two unsigned integers of 24 bits, and the output is in 48 bits.
 
-    > For example, if input numbers are in two bits, like 10 and 11, then the output is 0110; and input 11 and 11 makes 1001. 24-bit inputs are similar.
+    > For example, if input numbers are in two bits, like 10 and 11, then the output is 0110; and input 11 and 11 make 1001. 24-bit inputs are similar.
 
   - you can also use add boxes of any bits
 
