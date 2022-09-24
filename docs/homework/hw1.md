@@ -124,11 +124,12 @@ Steps to convert ASCII string to base64:
    - 52-61 corresponds to 0-9
    - 62 corresponds to + and 63 corresponds to /.
 3. If the subgroup is less than 6 bits, add 0 to its lower position.
-4. If the last group is 8 bits, add "==" to the end of the encoded string. If the last subgroup is 16 bits, add just one "=".
+4. If the last group is 8 bits, add "==" to the end of the encoded string. If the last group is 16 bits, add just one "=".
 
 > For example, in order to convert "M", first write it as binary:01001101. The first subgroup is 010011(19), corresponds to "T". The last subgroup is 010000(added 4 zeros), corresponds to "Q"(16). Since the last group is 8 bits, we should add \"\=\=\" at the end of the encoded string to indicate this. The final base64 encoding is "TQ==".
 
-(1) Convert ASCII string "\t\n\r" to base64.
+(1) Convert ASCII string "\t\n\r" to base64. 
+Hint：'\t', '\n' and '\r' are "escape characters", you can search for information about "escape characters" online if you don't know where to get the ASCII values of them. You can also try to program in C to help you get the ASCII values.
 
 (2) Give a example where base64 encoding can be used.
 
