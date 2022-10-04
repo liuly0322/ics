@@ -4,7 +4,7 @@
 
 ## T1
 
-略
+![](image/1.png)
 
 > 部分同学没有用 black boxes 表示出来，若是考试时需注意按照题目要求。
 
@@ -85,7 +85,7 @@ int main() {
 
 ## T6
 
-10001001 = 137
+$$10001001 = 137$$
 
 $$(1.11111001101001000000000)\times 2^{137-127} = 111\_1110\_0110.1001 = 2022.5625 = 2022\frac{9}{16}$$
 
@@ -137,21 +137,25 @@ $$
 
 1. Mult
 
-$$A[23:31] + B[23:31] + 10000001 \to EXP[8:0]$$
-
-$$\lbrace 1, A[0:23]\rbrace * \lbrace 1, B[0:23]\rbrace = FRAC[0:48]$$
-
-$$(FRAC[47] ? \lbrace 0, EXP, FRAC[23:46]\rbrace : \lbrace 0, EXP+00000001,FRAC[24:47] \rbrace) \to C[0:32]$$
+$$
+\begin{align*}
+EXP[0:8]&\leftarrow A[23:31] + B[23:31] + 10000001\\
+FRAC[0:48] &\leftarrow \lbrace 1, A[0:23]\rbrace * \lbrace 1, B[0:23]\rbrace\\
+C[0:32]&\leftarrow(FRAC[47] ? \lbrace 0, EXP, FRAC[23:46]\rbrace : \lbrace 0, EXP+00000001,FRAC[24:47] \rbrace)
+\end{align*}
+$$
 
 2. Add
 
-$$A \geq B \Rightarrow A[23:31] \geq B[23:31]$$
+假定 $A \geq B$，则 $A[23:31] \geq B[23:31]$
 
-$$A[23:31]-B[23:31] \to SHIFT$$
-
-$$\lbrace 01,A[0:23]\rbrace+(\lbrace 01, B[0:23]\rbrace >>SHIFT) \to FRAC[0:25]$$
-
-$$(FRAC[24] ? \lbrace 0, A[23:31]+00000001,FRAC[1:24]\rbrace:\lbrace 0, A[23:31], FRAC[0:23]\rbrace)\to C[0:32]$$
+$$
+\begin{align*}
+SHIFT &\leftarrow A[23:31]-B[23:31]\\
+FRAC[0:25] &\leftarrow\lbrace 01,A[0:23]\rbrace+(\lbrace 01, B[0:23]\rbrace >>SHIFT)\\
+C[0:32]&\leftarrow (FRAC[24] ? \lbrace 0, A[23:31]+00000001,FRAC[1:24]\rbrace:\lbrace 0, A[23:31], FRAC[0:23]\rbrace)
+\end{align*}
+$$
 
 > 以上答案由隔壁班助教提供，下面我作简要解释
 
@@ -166,16 +170,20 @@ $$(FRAC[24] ? \lbrace 0, A[23:31]+00000001,FRAC[1:24]\rbrace:\lbrace 0, A[23:31]
 
 为方便理解，再具体一点
 $$
-1.frac_a \times 2^{exp_a} \times 1.frac_b\times2^{exp_b} = 1.frac_a \times 1.frac_b \times 2^{exp_a + exp_b}\\
-1.\underbrace{frac_a}_{23位}\times 1.\underbrace{frac_b}_{23位} = \underbrace{FRAC[47]FRAC[46]}_{2位}.\underbrace{frac}_{46位}
+\begin{align*}
+1.frac_a \times 2^{exp_a} \times 1.frac_b\times2^{exp_b} &= 1.frac_a \times 1.frac_b \times 2^{exp_a + exp_b}\\
+1.\underbrace{frac_a}_{23位}\times 1.\underbrace{frac_b}_{23位} &= \underbrace{FRAC[47]FRAC[46]}_{2位}.\underbrace{frac}_{46位}
+\end{align*}
 $$
 如果 $FRAC[47]$ 为 1，则小数点应该再往前点一位，所以指数位还需 + 1；否则 $FRAC[46]$ 为 1，小数点不变，因此指数位不需要 + 1。
 
 对于加法，也是同理可得
 
 $$
-1.frac_a \times 2^{exp_a} + 1.frac_b\times2^{exp_b} = (1.frac_a + 1.frac_b\times 2^{exp_b-exp_a}) \times 2^{exp_a}\\
-\underbrace{1.frac_a}_{24位} + \underbrace{1.frac_b\times2^{exp_b-exp_a}}_{24位} = \underbrace{FRAC[24]FRAC[23]}_{2位}.\underbrace{frac}_{23位}
+\begin{align*}
+1.frac_a \times 2^{exp_a} + 1.frac_b\times2^{exp_b} &= (1.frac_a + 1.frac_b\times 2^{exp_b-exp_a}) \times 2^{exp_a}\\
+\underbrace{1.frac_a}_{24位} + \underbrace{1.frac_b\times2^{exp_b-exp_a}}_{24位} &= \underbrace{FRAC[24]FRAC[23]}_{2位}.\underbrace{frac}_{23位}
+\end{align*}
 $$
 
 上述$\times2^{exp_b-exp_a}$ 即 **右移** $exp_a-exp_b$ 位，小数位前面补 01 是考虑得到 25 位的 $FRAC$。其它处理均与乘法类似，不赘述。
