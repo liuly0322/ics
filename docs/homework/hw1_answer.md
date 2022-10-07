@@ -141,7 +141,7 @@ $$
 \begin{align*}
 EXP[0:8]&\leftarrow A[23:31] + B[23:31] + 10000001\\
 FRAC[0:48] &\leftarrow \lbrace 1, A[0:23]\rbrace * \lbrace 1, B[0:23]\rbrace\\
-C[0:32]&\leftarrow(FRAC[47] ? \lbrace 0, EXP, FRAC[23:46]\rbrace : \lbrace 0, EXP+00000001,FRAC[24:47] \rbrace)
+C[0:32]&\leftarrow((FRAC[47] == 0)? \lbrace 0, EXP, FRAC[23:46]\rbrace : \lbrace 0, EXP+00000001,FRAC[24:47] \rbrace)
 \end{align*}
 $$
 
