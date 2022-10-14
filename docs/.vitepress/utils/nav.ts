@@ -29,4 +29,9 @@ export const nav = [
     activeMatch: '/resource',
     link: '/resource/ics',
   },
+  {
+    text: 'faq',
+    activeMatch: '/faq',
+    link: '/faq/mac_lc3tools',
+  },
 ]

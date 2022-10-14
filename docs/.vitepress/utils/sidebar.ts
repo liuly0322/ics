@@ -26,5 +26,13 @@ export const sidebar = {
       ],
     },
   ],
+  '/faq/': [
+    {
+      text: 'faq',
+      items: [
+        { text: 'mac 下 lc3tools 问题', link: '/faq/mac_lc3tools' },
+      ],
+    },
+  ],
 }
 
