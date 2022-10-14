@@ -22,11 +22,10 @@ html.dark .f-message {
   }
 }
 
-mjx-container>svg {
-  display: inline;
+mjx-container[display="true"] {
+  overflow: auto;
 }
 
-mjx-container>svg[display="true"] {
-  display: block;
-  margin: auto;
+mjx-container>svg {
+  display: inline;
 }

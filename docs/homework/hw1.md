@@ -8,7 +8,7 @@
 
 - DDL：10.3 23：59
 
-- 答案：DDL 后公布
+- [答案](hw1_answer)
 
 - 本次作业 [PDF](/pdf/hw1.pdf)
 
