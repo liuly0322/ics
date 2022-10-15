@@ -3,20 +3,13 @@ import hexbin from './lc3_hexbin'
 import type { AssemblyResult, Event } from './lc3_core'
 import Core from './lc3_core'
 
-class CaseResult {
-  constructor(
-    public testcase: string,
-    public expectedAns: number,
-    public instructions: number,
-    public logs: string[],
-    public actualAns: number,
-  ) {
-    this.instructions = instructions
-    this.logs = logs
-    this.testcase = testcase
-    this.expectedAns = expectedAns
-    this.actualAns = actualAns
-  }
+interface CaseResult {
+  /** Cycles used to run the testcase */
+  cycles: number
+  /** Logs of the testcase */
+  logs: string[]
+  /** If this testcase is passed */
+  passed: boolean
 }
 
 export type ExpectedAnsFunc = (lc3: Core, testcase: string) => number
@@ -25,7 +18,7 @@ export type ActualAnsFunc = (lc3: Core) => number
 function caseTest(
   lc3: Core,
   limit: number,
-  log: boolean,
+  debug: boolean,
   testcase: string,
   expectedAnsFunc: ExpectedAnsFunc,
   actualAnsFunc: ActualAnsFunc,
@@ -34,28 +27,30 @@ function caseTest(
   const expectedAns = expectedAnsFunc(lc3, testcase)
   const logs: string[] = []
 
-  const eventCallback = (event: Event) => {
-    let log = ''
-    switch (event.type) {
-      case 'exception':
-        log = `异常：${event.exception}`
-        break
-      case 'memset':
-        log = `x${event.address.toString(16)} 变为 ${event.newValue}`
-        break
-      case 'regset':
-        if (typeof event.register == 'number')
-          log = `R${event.register} 变为 ${event.newValue}`
+  // debug listener
+  if (debug) {
+    const eventCallback = (event: Event) => {
+      let log = ''
+      switch (event.type) {
+        case 'exception':
+          log = `异常：${event.exception}`
+          break
+        case 'memset':
+          log = `x${event.address.toString(16)} 变为 ${event.newValue}`
+          break
+        case 'regset':
+          if (typeof event.register == 'number')
+            log = `R${event.register} 变为 ${event.newValue}`
+      }
+      if (log) {
+        const last = logs.pop()!
+        logs.push(`${last} (${log})`)
+      }
     }
-    if (log) {
-      const last = logs.pop()!
-      logs.push(`${last} (${log})`)
-    }
-  }
-  if (log)
     lc3.addListener(eventCallback)
+  }
 
-  const performInstructionCycle = log
+  const performInstructionCycle = debug
     ? () => {
         const curInstr = lc3.instructionAddressToString(lc3.pc)
         logs.push(`x${lc3.pc.toString(16)}：${curInstr}`)
@@ -65,23 +60,42 @@ function caseTest(
         lc3.nextInstruction()
       }
 
-  let cnt = 0
-  for (; cnt <= limit; cnt++) {
+  // main loop
+  let cycles = 0
+  for (; cycles <= limit; cycles++) {
     const op = lc3.memory[lc3.pc]
+    // if op is halt or nop, break
     if ((op >= 0xF000 && op <= 0xF0FF) || op === 0)
       break
-
     performInstructionCycle()
   }
 
   const actualAns = actualAnsFunc(lc3)
-  return new CaseResult(testcase, expectedAns, cnt, logs, actualAns)
+
+  // finish this testcase, save logs
+  if (cycles > limit) {
+    logs.push(
+      `异常 ${testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
+    )
+  }
+  else if (expectedAns === actualAns) {
+    logs.push(
+      `通过 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}`,
+    )
+  }
+  else {
+    logs.push(
+      `失败 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}, 预期: ${expectedAns}`,
+    )
+  }
+  return { cycles, logs, passed: expectedAns === actualAns }
 }
 
 export interface BenchResult {
-  state?: 'assembly' | 'machine'
-  passes?: string
-  logs?: string[]
+  /** Which kind of code the input is treated as, null if not recognized */
+  state: 'assembly' | 'machine' | null
+  /** Logs of the full test */
+  logs: string[]
 }
 
 export default function lc3bench(
@@ -90,10 +104,11 @@ export default function lc3bench(
   actualAnsFunc: ActualAnsFunc,
   testcases: string[],
   instrLimit: number,
-  log: boolean,
+  debug: boolean,
 ): BenchResult {
-  const result: BenchResult = { logs: [] }
+  const result: BenchResult = { state: null, logs: [] }
 
+  // try load the code
   const lc3 = new Core()
   const asResult = as(code)
   let hexbinResult = hexbin(code)
@@ -112,51 +127,34 @@ export default function lc3bench(
     result.state = 'machine'
   }
   else {
-    return {
-      logs: ['代码无法被识别为正确的机器码或者汇编代码',
-        `机器码：${hexbinResult.error}`,
-        `汇编：${asResult.error}`],
-    }
+    result.logs = ['代码无法被识别为正确的机器码或者汇编代码', `机器码：${hexbinResult.error}`, `汇编：${asResult.error}`]
+    return result
   }
 
-  if (log)
+  // if in debug mode, only test the first testcase
+  if (debug)
     testcases = [testcases[0]]
 
+  // test each testcase
   const caseResults = testcases.map((testcase) => {
     const lc3 = new Core()
     if (result.state === 'assembly')
       lc3.loadAssembled(asResult as AssemblyResult)
     else
       lc3.loadAssembled(hexbinResult as AssemblyResult)
-    return caseTest(lc3, instrLimit, log, testcase, expectedAnsFunc, actualAnsFunc)
+    return caseTest(lc3, instrLimit, debug, testcase, expectedAnsFunc, actualAnsFunc)
   })
 
+  // all testcases result information
   const totalCases = caseResults.length
-  const passCases = caseResults.filter(testcase => testcase.expectedAns === testcase.actualAns).length
-  const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.instructions, 0)
+  const passCases = caseResults.filter(testcase => testcase.passed).length
+  const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.cycles, 0)
 
-  result.passes = `${passCases} / ${totalCases} 个通过测试用例`
-  result.logs!.push(`平均指令数: ${totalInstructions / totalCases}`)
+  result.logs.push(`${passCases} / ${totalCases} 个通过测试用例`)
+  result.logs.push(`平均指令数: ${totalInstructions / totalCases}`)
 
-  caseResults.forEach((testcase) => {
-    if (testcase.instructions > instrLimit) {
-      result.logs!.push(
-        `异常 ${testcase.testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
-      )
-    }
-    else if (testcase.expectedAns === testcase.actualAns) {
-      result.logs!.push(
-        `通过 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.actualAns}`,
-      )
-    }
-    else {
-      result.logs!.push(
-        `失败 ${testcase.testcase}, 指令数: ${testcase.instructions}, 输出: ${testcase.actualAns}, 预期: ${testcase.expectedAns}`,
-      )
-    }
-    if (log)
-      result.logs!.push(...testcase.logs)
-  })
+  // collect testcase logs
+  result.logs.push(...caseResults.map(testcase => testcase.logs).flat())
 
   return result
 }

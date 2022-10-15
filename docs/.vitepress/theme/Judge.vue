@@ -3,14 +3,14 @@ import { FMessage } from 'fighting-design'
 import { getPreset, presets } from './lc3/lc3_preset'
 import type { ActualAnsFunc, BenchResult, ExpectedAnsFunc } from './lc3/lc3_bench'
 import lc3Bench from './lc3/lc3_bench'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 
 const instrLimit = ref(100000)
 const lab = ref('自定义')
 const model = ref(getPreset(lab.value))
 const code = ref('')
-const log = ref(false)
-const outputs = ref({} as BenchResult)
+const debug = ref(false)
+const outputs = ref<BenchResult>({ state: null, logs: [] })
 
 const cases = computed(() =>
   model.value.testCases
@@ -20,26 +20,28 @@ const cases = computed(() =>
     .filter(Boolean),
 )
 
+// load & save user code
 onMounted(() => {
   code.value = window.localStorage.getItem('lc3code') ?? ''
+  watchEffect(() => {
+    window.localStorage.setItem('lc3code', code.value)
+  })
 })
 
-watch(code, (cur) => {
-  window.localStorage.setItem('lc3code', cur)
-})
-
-watch(lab, (cur) => {
-  model.value = getPreset(cur)
-  outputs.value = {}
-})
-
-watch(log, (cur) => {
-  if (cur) {
+// enter debug mode hint
+watchEffect(() => {
+  if (debug.value) {
     FMessage({
       message: '开启调试模式后为了避免混淆，只显示第一个样例',
       type: 'primary',
     })
   }
+})
+
+// change presets
+watch(lab, (cur) => {
+  model.value = getPreset(cur)
+  outputs.value = { state: null, logs: [] }
 })
 
 const expectedAnsFunc = computed(() => {
@@ -65,7 +67,7 @@ const actualAnsFunc = computed(() => {
 const isValidAnsCode = computed(() => typeof actualAnsFunc.value != 'string')
 
 const bench = () => {
-  outputs.value = {}
+  outputs.value = { state: null, logs: [] }
 
   const errors = [[!cases.value.length, '缺少测试样例'],
     [!code.value, '缺少待测代码'],
@@ -91,7 +93,7 @@ const bench = () => {
     actualAnsFunc.value as ActualAnsFunc,
     cases.value,
     instrLimit.value,
-    log.value,
+    debug.value,
   )
 }
 </script>
@@ -159,7 +161,7 @@ const bench = () => {
 
     <div class="form-item">
       <span class="label">调试模式</span>
-      <f-switch v-model="log" />
+      <f-switch v-model="debug" />
     </div>
 
     <div style="display: flex; justify-content: flex-end">
@@ -168,11 +170,11 @@ const bench = () => {
       </f-button>
     </div>
 
-    <div v-if="Object.keys(outputs).length" class="card" style="margin-top: 2em">
+    <div v-if="outputs.logs.length" class="card" style="margin-top: 2em">
       <span class="label">{{ outputs.state === 'assembly' ? '汇编' : outputs.state === 'machine' ? '机器码' : '' }}评测</span>
-      {{ outputs.passes }}
+      {{ outputs.logs[0] }}
       <ul>
-        <li v-for="output in outputs.logs" :key="output">
+        <li v-for="(output, index) in outputs.logs.slice(1)" :key="index">
           {{ output }}
         </li>
       </ul>
@@ -200,7 +202,7 @@ textarea {
   box-sizing: border-box;
   width: 100%;
   padding: 0.5em;
-  font-family: Consolas, "Courier New", Courier, FreeMono, monospace
+  font-family: "Fira Code", Consolas, "Courier New", Courier, FreeMono, monospace
 }
 
 .border-red {
