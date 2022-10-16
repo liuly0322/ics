@@ -5,22 +5,22 @@ import type { ActualAnsFunc, BenchResult, ExpectedAnsFunc } from './lc3/lc3_benc
 import lc3Bench from './lc3/lc3_bench'
 import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 
-const instrLimit = ref(100000)
+const instrLimit = ref(1000000)
 const lab = ref('自定义')
-const model = ref(getPreset(lab.value))
+const labModel = ref(getPreset(lab.value))
 const code = ref('')
 const debug = ref(false)
 const outputs = ref<BenchResult>({ state: null, logs: [] })
 
 const cases = computed(() =>
-  model.value.testCases
+  labModel.value.testCases
     .replace(/，/g, ',')
     .split(',')
     .map((s: string) => s.trim())
     .filter(Boolean),
 )
 
-// load & save user code
+// load & save user's code
 onMounted(() => {
   code.value = window.localStorage.getItem('lc3code') ?? ''
   watchEffect(() => {
@@ -28,7 +28,7 @@ onMounted(() => {
   })
 })
 
-// enter debug mode hint
+// debug mode hint
 watchEffect(() => {
   if (debug.value) {
     FMessage({
@@ -40,14 +40,14 @@ watchEffect(() => {
 
 // change presets
 watch(lab, (cur) => {
-  model.value = getPreset(cur)
+  labModel.value = getPreset(cur)
   outputs.value = { state: null, logs: [] }
 })
 
 const expectedAnsFunc = computed(() => {
   try {
     // eslint-disable-next-line no-new-func
-    return Function('lc3', 'testcase', model.value.testCode) as ExpectedAnsFunc
+    return Function('lc3', 'testcase', labModel.value.testCode) as ExpectedAnsFunc
   }
   catch (e) {
     return String(e)
@@ -58,7 +58,7 @@ const isValidTestCode = computed(() => typeof expectedAnsFunc.value != 'string')
 const actualAnsFunc = computed(() => {
   try {
     // eslint-disable-next-line no-new-func
-    return Function('lc3', model.value.ansCode) as ActualAnsFunc
+    return Function('lc3', labModel.value.ansCode) as ActualAnsFunc
   }
   catch (e) {
     return String(e)
@@ -71,9 +71,9 @@ const bench = () => {
 
   const errors = [[!cases.value.length, '缺少测试样例'],
     [!code.value, '缺少待测代码'],
-    [!model.value.testCode, '缺少评测函数'],
+    [!labModel.value.testCode, '缺少评测函数'],
     [!isValidTestCode.value, '评测函数有语法错误'],
-    [!model.value.ansCode, '缺少答案函数'],
+    [!labModel.value.ansCode, '缺少答案函数'],
     [!isValidAnsCode.value, '答案函数有语法错误']]
     .filter(err => err[0])
     .map(err => err[1])
@@ -117,13 +117,13 @@ const bench = () => {
 
     <div class="card" style="margin-bottom: 2em">
       <span class="label">实验要求</span>
-      <div>{{ model.description }}</div>
+      <div>{{ labModel.description }}</div>
     </div>
 
     <div class="form-item">
       <span class="label">测试样例，样例之间以逗号分割</span>
       <input
-        v-model="model.testCases"
+        v-model="labModel.testCases"
         style="border: 0.5px solid; padding: 0.5em; margin: 4px; box-sizing: border-box; width: 100%"
       >
     </div>
@@ -136,7 +136,7 @@ const bench = () => {
     <div v-show="lab === '自定义'" class="form-item">
       <span class="label">评测函数</span>
       <textarea
-        v-model="model.testCode" rows="10"
+        v-model="labModel.testCode" rows="10"
         :class="typeof expectedAnsFunc == 'string' ? 'border-red' : ''"
         placeholder="一个 js 函数的函数体，接受单个样例（字符串）作为参数，初始化 lc3.r 和 lc3.memory（寄存器数组和内存数组），并返回对于每个样例而言预期的输出"
         style="border: 0.5px solid; margin: 4px"
@@ -149,7 +149,7 @@ const bench = () => {
     <div v-show="lab === '自定义'" class="form-item">
       <span class="label">答案函数</span>
       <textarea
-        v-model="model.ansCode" rows="10"
+        v-model="labModel.ansCode" rows="10"
         :class="typeof actualAnsFunc == 'string' ? 'border-red' : ''"
         placeholder="一个 js 函数的函数体，返回测试结束后读取 lc3 模拟器的哪个变量（如 lc3.r 和 lc3.memory 数组中的某一项）的值作为用户程序运行的输出（即评测依据）"
         style="border: 0.5px solid; margin: 4px"

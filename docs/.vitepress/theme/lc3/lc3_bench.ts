@@ -73,21 +73,13 @@ function caseTest(
   const actualAns = actualAnsFunc(lc3)
 
   // finish this testcase, save logs
-  if (cycles > limit) {
-    logs.push(
-      `异常 ${testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`,
-    )
-  }
-  else if (expectedAns === actualAns) {
-    logs.push(
-      `通过 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}`,
-    )
-  }
-  else {
-    logs.push(
-      `失败 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}, 预期: ${expectedAns}`,
-    )
-  }
+  if (cycles > limit)
+    logs.push(`异常 ${testcase}, 超出最大指令数，请调整设置，或者可能发生了死循环`)
+  else if (expectedAns === actualAns)
+    logs.push(`通过 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}`)
+  else
+    logs.push(`失败 ${testcase}, 指令数: ${cycles}, 输出: ${actualAns}, 预期: ${expectedAns}`)
+
   return { cycles, logs, passed: expectedAns === actualAns }
 }
 
@@ -96,6 +88,22 @@ export interface BenchResult {
   state: 'assembly' | 'machine' | null
   /** Logs of the full test */
   logs: string[]
+}
+
+function assembleCode(code: string): ['assembly' | 'machine', AssemblyResult] | [null, string[]] {
+  const asResult = as(code)
+  let hexbinResult = hexbin(code)
+  if (!('error' in asResult)) {
+    return ['assembly', asResult]
+  }
+  else if (!('error' in hexbinResult)) {
+    if (hexbinResult.orig !== 0x3000)
+      hexbinResult = hexbin(`0011000000000000\n${code}`) as AssemblyResult
+    return ['machine', hexbinResult]
+  }
+  else {
+    return [null, [`机器码：${hexbinResult.error}`, `汇编：${asResult.error}`]]
+  }
 }
 
 export default function lc3bench(
@@ -108,28 +116,13 @@ export default function lc3bench(
 ): BenchResult {
   const result: BenchResult = { state: null, logs: [] }
 
-  // try load the code
-  const lc3 = new Core()
-  const asResult = as(code)
-  let hexbinResult = hexbin(code)
-  if (!('error' in asResult)) {
-    lc3.loadAssembled(asResult)
-    result.state = 'assembly'
-  }
-  else if (!('error' in hexbinResult)) {
-    if (hexbinResult.orig !== 0x3000) {
-      hexbinResult = hexbin(`0011000000000000\n${code}`) as AssemblyResult
-      lc3.loadAssembled(hexbinResult)
-    }
-    else {
-      lc3.loadAssembled(hexbinResult)
-    }
-    result.state = 'machine'
-  }
-  else {
-    result.logs = ['代码无法被识别为正确的机器码或者汇编代码', `机器码：${hexbinResult.error}`, `汇编：${asResult.error}`]
+  // try assemble the code
+  const [assemblyState, assembyResult] = assembleCode(code)
+  if (!assemblyState) {
+    result.logs = assembyResult
     return result
   }
+  result.state = assemblyState
 
   // if in debug mode, only test the first testcase
   if (debug)
@@ -138,22 +131,16 @@ export default function lc3bench(
   // test each testcase
   const caseResults = testcases.map((testcase) => {
     const lc3 = new Core()
-    if (result.state === 'assembly')
-      lc3.loadAssembled(asResult as AssemblyResult)
-    else
-      lc3.loadAssembled(hexbinResult as AssemblyResult)
+    lc3.loadAssembled(assembyResult)
     return caseTest(lc3, instrLimit, debug, testcase, expectedAnsFunc, actualAnsFunc)
   })
 
-  // all testcases result information
+  // collect logs
   const totalCases = caseResults.length
   const passCases = caseResults.filter(testcase => testcase.passed).length
   const totalInstructions = caseResults.reduce((acc, testcase) => acc + testcase.cycles, 0)
-
   result.logs.push(`${passCases} / ${totalCases} 个通过测试用例`)
   result.logs.push(`平均指令数: ${totalInstructions / totalCases}`)
-
-  // collect testcase logs
   result.logs.push(...caseResults.map(testcase => testcase.logs).flat())
 
   return result
