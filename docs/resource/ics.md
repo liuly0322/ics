@@ -12,6 +12,12 @@
 
 <https://highered.mheducation.com/sites/1260150534/student_view0/student_solutions_manual.html>
 
+## PATT 主页
+
+点击主页里的 EE306 链接可以获取往年 PATT 教授这门课的课程资源（作业，考试，实验等）
+
+<http://users.ece.utexas.edu/~patt/>
+
 ## lc3 手册
 
 即书后附录部分，介绍了指令集的格式，[链接](http://acsa.ustc.edu.cn/ics/download/lc3/lc3-handbook.pdf
