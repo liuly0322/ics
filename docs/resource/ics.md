@@ -1,5 +1,17 @@
 # 课程资源
 
+## 课程 PPT & 思维导图
+
+由老师整理
+
+<https://ics-ustc.feishu.cn/mindnotes/bmncnJPcRbC0Ct3bnm1dNai8m8b>
+
+## 机械工业出版社部分教材答案
+
+包含教材课后习题的奇数题号的答案
+
+<https://highered.mheducation.com/sites/1260150534/student_view0/student_solutions_manual.html>
+
 ## lc3 手册
 
 即书后附录部分，介绍了指令集的格式，[链接](http://acsa.ustc.edu.cn/ics/download/lc3/lc3-handbook.pdf
