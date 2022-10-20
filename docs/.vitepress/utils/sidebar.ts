@@ -16,6 +16,7 @@ export const sidebar = {
       items: [
         { text: 'hw1', link: '/homework/hw1' },
         { text: 'hw2', link: '/homework/hw2' },
+        { text: 'hw3', link: '/homework/hw3' },
       ],
     },
   ],
