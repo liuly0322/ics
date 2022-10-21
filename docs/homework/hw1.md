@@ -22,7 +22,7 @@ Say we had another box capable of multiplying two numbers together. See Figure 1
 
 We can connect these boxes together to calculate p × (m + n). See Figure 1.10c.
 
-![1](image/1-1.png)
+![1](images/1-1.png)
 
 <p style="text-align: center">Figure 1.10 from page 20</p>
 
@@ -156,7 +156,7 @@ For example: if$A=0\ 11110000\ 00000000\ 00000000\ 0000111$, then $A[0]=1$, $A[3
 
   - you can also use add boxes of any bits
 
-    ![1](image/1-2.png)
+    ![1](images/1-2.png)
 
   - You can also use `selector` boxes, which take 3 inputs, a, b, and sel
     - if sel == 0, output = a

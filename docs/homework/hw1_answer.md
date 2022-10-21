@@ -4,7 +4,7 @@
 
 ## T1
 
-![](image/1.png)
+![](images/1.png)
 
 > 部分同学没有用 black boxes 表示出来，若是考试时需注意按照题目要求。
 
