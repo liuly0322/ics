@@ -15,7 +15,7 @@
 
 The logic diagram shown below is a finite state machine.
 
-<img src="images/hw3-t1.png" style="zoom:67%;" />
+![](images/hw3-t1.png)
 
 Your job:
 
@@ -147,7 +147,7 @@ Just before the start of cycle 1, MAR contains 000, MDR contains 00011001, and t
 
 In this problem we perform five successive accesses to memory. The following table shows for each access whether it is a read (load) or write (store), and the contents of the MAR and MDR at the completion of the access. Some entries are not shown. Note that we have shortened the addressability to 5 bits, rather than the 16 bits that we are used to in the LC-3, in order to decrease the excess writing you would have to do.
 
-<img src="images/hw3-t10-1.png" style="zoom:50%;" />
+![](images/hw3-t10-1.png)
 
 The following three tables show the contents of memory locations x4000 to x4004 before the first access, after the third access, and after the fifth access. Again, not all entries are shown. We have added an unusual constraint to this problem in order to get one correct answer. The MDR can **ONLY** be loaded from memory as a result of a load (read) access.
 
