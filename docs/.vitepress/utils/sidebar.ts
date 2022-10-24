@@ -17,6 +17,7 @@ export const sidebar = {
         { text: 'hw1', link: '/homework/hw1' },
         { text: 'hw2', link: '/homework/hw2' },
         { text: 'hw3', link: '/homework/hw3' },
+        { text: 'hw4', link: '/homework/hw4' },
       ],
     },
   ],
