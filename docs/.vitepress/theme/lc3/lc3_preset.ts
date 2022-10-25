@@ -5,22 +5,30 @@ interface LabPreset {
   ansCode: string
   /** Testcases seperated by comma */
   testCases: string
-  /** Lab description */
-  description: string
 }
 
 const labs: Record<string, LabPreset> = {
   lab1: {
-    testCode: '',
-    ansCode: '',
+    testCode: `
+let [number, bits] = testcase.split(':').map(Number)
+lc3.memory[0x3100] = number
+lc3.memory[0x3101] = bits
+let mask = 1
+let ans  = 0
+while (bits-- > 0) {
+  if (number & mask) {
+     ans++
+  }
+  mask = mask + mask
+}
+return ans`,
+    ansCode: 'return lc3.memory[0x3102]',
     testCases: '',
-    description: '别急，等 lab1 出...',
   },
   自定义: {
     testCode: '',
     ansCode: '',
     testCases: '',
-    description: '自定义测试样例',
   },
 }
 

@@ -6,7 +6,7 @@ import lc3Bench from './lc3/lc3_bench'
 import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 
 const instrLimit = ref(1000000)
-const lab = ref('自定义')
+const lab = ref('lab1')
 const labModel = ref(getPreset(lab.value))
 const code = ref('')
 const debug = ref(false)
@@ -113,11 +113,6 @@ const bench = () => {
           <label :for="preset">{{ preset }}</label>
         </div>
       </div>
-    </div>
-
-    <div class="card" style="margin-bottom: 2em">
-      <span class="label">实验要求</span>
-      <div>{{ labModel.description }}</div>
     </div>
 
     <div class="form-item">
