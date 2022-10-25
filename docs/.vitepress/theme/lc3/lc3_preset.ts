@@ -23,7 +23,7 @@ while (bits-- > 0) {
 }
 return ans`,
     ansCode: 'return lc3.memory[0x3102]',
-    testCases: '',
+    testCases: '13:3, 167:6, 32767:15',
   },
   自定义: {
     testCode: '',
