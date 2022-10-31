@@ -9,6 +9,8 @@
 
 - DDL：10.25 23：30
 
+- [答案](/pdf/hw2_ans.pdf)
+
 - 本次作业 [PDF](/pdf/hw2.pdf)
 
 ## T1
