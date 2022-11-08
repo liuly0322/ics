@@ -157,6 +157,9 @@ const bench = () => {
     <div class="form-item">
       <span class="label">调试模式</span>
       <f-switch v-model="debug" />
+      <blockquote>
+        <p>如果指令数过多，无法显示日志，可以尝试减小 <code>单样例最大指令数</code> 的值</p>
+      </blockquote>
     </div>
 
     <div style="display: flex; justify-content: flex-end">
