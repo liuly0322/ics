@@ -32,6 +32,6 @@ export const nav = [
   {
     text: 'faq',
     activeMatch: '/faq',
-    link: '/faq/mac_lc3tools',
+    link: '/faq/lc3tools',
   },
 ]
