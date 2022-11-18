@@ -29,3 +29,12 @@ mjx-container[display="true"] {
 mjx-container>svg {
   display: inline;
 }
+
+@media (min-width: 768px) {
+  .DocSearch-Button {
+    height: 100%;
+    padding: .5em;
+    padding-left: 1em;
+    background-color: #f9f9f9;
+  }
+}
