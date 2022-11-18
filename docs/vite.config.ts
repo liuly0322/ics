@@ -1,4 +1,10 @@
 import type { Plugin, UserConfigExport } from 'vite'
+import { SearchPlugin } from 'vitepress-plugin-search'
+
+const SearchOptions = {
+  encode: false,
+  tokenize: 'full',
+}
 
 // https://github.com/vuejs/vitepress/discussions/1015#discussioncomment-3177860
 const NavLinkPatch = (): Plugin => ({
@@ -12,7 +18,7 @@ const NavLinkPatch = (): Plugin => ({
 
 export default (): UserConfigExport => {
   return {
-    plugins: [NavLinkPatch()],
+    plugins: [NavLinkPatch(), SearchPlugin(SearchOptions)],
     optimizeDeps: {
       exclude: ['vitepress'],
     },
