@@ -26,11 +26,6 @@ return ans`,
     testCases: '13:3, 167:6, 32767:15',
   },
   lab2: {
-    testCode: '',
-    ansCode: '',
-    testCases: '',
-  },
-  自定义: {
     testCode: `
 let [p, q, n] = testcase.split(':').map(Number)
 lc3.memory[0x3100] = p
@@ -43,6 +38,11 @@ for (let i = 2; i <= n; i++) {
 return f[n]`,
     ansCode: 'return lc3.memory[0x3103]',
     testCases: '256:123:100, 512:456:200, 1024:789:300',
+  },
+  自定义: {
+    testCode: '',
+    ansCode: '',
+    testCases: '',
   },
 }
 

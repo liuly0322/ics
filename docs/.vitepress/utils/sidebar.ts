@@ -26,6 +26,7 @@ export const sidebar = {
       text: '实验',
       items: [
         { text: 'lab1', link: '/labs/lab1' },
+        { text: 'lab2', link: '/labs/lab2' },
       ],
     },
   ],
