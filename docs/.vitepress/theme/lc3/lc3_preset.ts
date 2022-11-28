@@ -39,6 +39,18 @@ return f[n]`,
     ansCode: 'return lc3.memory[0x3103]',
     testCases: '256:123:100, 512:456:200, 1024:789:300',
   },
+  lab3: {
+    testCode: `
+const [n, s, ans] = testcase.split(':')
+lc3.memory[0x3100] = Number(n)
+for (let i = 1; i <= Number(n); i++) {
+  lc3.memory[0x3100 + i] = s[i - 1].charCodeAt();
+}
+return Number(ans)
+`,
+    ansCode: 'return lc3.memory[0x3050]',
+    testCases: '6:aabbbc:3,5:ZZZZz:4,6:aabaaa:3',
+  },
   自定义: {
     testCode: '',
     ansCode: '',
