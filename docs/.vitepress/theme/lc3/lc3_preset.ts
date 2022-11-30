@@ -51,6 +51,32 @@ return Number(ans)
     ansCode: 'return lc3.memory[0x3050]',
     testCases: '6:aabbbc:3,5:ZZZZz:4,6:aabaaa:3',
   },
+  lab4: {
+    testCode: `
+const arr = testcase.split(':').map(Number)
+const baseAddr = 0x4000
+for (let i = 0; i < 16; i++) {
+  lc3.memory[baseAddr + i] = arr[i]
+}
+arr.sort((a, b) => a - b)
+const cntA = arr.slice(-4).filter(score => score >= 85).length
+const cntB = arr.slice(-8).filter(score => score < 85 && score >= 75).length
+arr.push(cntA)
+arr.push(cntB)
+return arr.join(',')
+  `,
+    ansCode: `
+const arr = new Array()
+const baseAddr = 0x5000
+for (let i = 0; i < 16; i++) {
+  arr.push(lc3.memory[baseAddr + i])
+}
+arr.push(lc3.memory[baseAddr + 0x100])
+arr.push(lc3.memory[baseAddr + 0x101])
+return arr.join(',')
+  `,
+    testCases: '100:95:90:85:80:60:55:50:45:40:35:30:25:20:10:0,95:100:0:50:45:40:80:65:70:75:35:20:25:15:10:90,88:77:66:55:99:33:44:22:11:10:9:98:97:53:57:21',
+  },
   自定义: {
     testCode: '',
     ansCode: '',

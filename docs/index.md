@@ -22,5 +22,6 @@
   - [实验一](/labs/lab1.html) 已公布，DDL: 11.09 23:30
   - [实验二](/labs/lab2.html) 已公布，DDL: 12.07 23:30
   - [实验三](/labs/lab3.html) 已公布，DDL: 12.14 23:30
+  - [实验四](/labs/lab4.html) 已公布，DDL: 12.21 23:30
   - [labA](/labs/labA.html) 已公布，DDL（暂定）: 不早于 12.28 23:30
   - [labS](/labs/labS.html) 已公布，DDL（暂定）: 不早于 12.28 23:30
