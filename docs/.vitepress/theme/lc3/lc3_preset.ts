@@ -66,7 +66,6 @@ const rankB = Math.min(scoreB - rankA, 4)
 return [...arr, rankA, rankB].join(',')
   `,
     ansCode: `
-const baseAddr = 0x5000
 const rankA = lc3.memory[0x5100]
 const rankB = lc3.memory[0x5101]
 return [...lc3.memory.slice(0x5000, 0x5010), rankA, rankB].join(',')
