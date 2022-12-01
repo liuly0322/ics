@@ -36,7 +36,7 @@ arr.sort((a, b) => a - b)
 const scoreA = arr.filter(score => score >= 85).length
 const scoreB = arr.filter(score => score >= 75).length
 const rankA = Math.min(scoreA, 4)
-const rankB = Math.min(scoreB - rankA, 4)
+const rankB = Math.min(scoreB, 8) - rankA
 return [...arr, rankA, rankB].join(',')
   `,ansCode:`
 const rankA = lc3.memory[0x5100]
