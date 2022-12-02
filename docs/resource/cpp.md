@@ -150,3 +150,114 @@ for (int i : a) {
 ```
 
 跟 Python 的 for 循环很像。
+
+## 模板（Template）
+
+模板是泛型编程的基础，例如你需要写两个 `add` 函数，它们只是参数类型和返回值不同，在 C 中需要分别实现，而 C++ 中可以使用模板：
+
+```cpp
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    std::cout << add<int>(1, 2) << std::endl;
+    std::cout << add<double>(1.5, 1.5) << std::endl;
+}
+```
+
+`typename T` 模版参数 `T`，在之后的模板函数 `add` 中 `T` 便可作为类型被使用。模板函数的例化也很简单，在之后加上尖括号，里面写上类型即可。
+
+还有模板类，可以自行了解。
+
+## 运算符重载
+
+（本实验未涉及，仅作拓展）
+
+在上面的例子中，如果 `T` 是自定义的类 `Complex`（复数）：
+
+```cpp
+#include <iostream>
+
+class Complex {
+private:
+    double real;
+    double image;
+
+public:
+    Complex(double real, double image)
+        : real(real), image(image) {}
+};
+
+template <typename T>
+T add(T a, T b) {
+    return a + b;
+}
+
+int main() {
+    Complex c1(1, 2);
+    Complex c2(3, 4);
+    std::cout << add<Complex>(c1, c2) << std::endl;
+}
+```
+
+其中 `Complex` 类里的 public 函数是该类的构造函数（Constructor），用于创建该类的对象。`:` 语法是初始化列表。
+
+编译报错
+
+```
+error: invalid operands to binary expression ('Complex' and 'Complex')
+    return a + b;
+```
+
+此时需要重载 `Complex` 类的 `+` 运算，同时需要让 `std::cout` 能够知道如何打印一个 `Complex` 对象。
+
+```cpp
+class Complex {
+private:
+    double real;
+    double image;
+
+public:
+    Complex(double real, double image)
+        : real(real), image(image) {}
+
+    Complex operator+(const Complex &other) const {
+        return {real + other.real, image + other.image};
+    }
+
+    friend std::ostream &
+    operator<<(std::ostream &output, const Complex &z) {
+        output << "Real :" << z.real << " Image :" << z.image;
+        return output;
+    }
+};
+```
+
+## 文件读写
+
+用 `fstream` 库里的 `ifstream` 和 `ofstream` 类。
+
+例如
+
+```cpp
+std::string input_filename = "./input.txt";
+std::ifstream input_file(input_filename);
+```
+
+就用 `input_filename` 初始化了一个 `ifstream` 对象 `input_file`，此后 `input_file` 的使用就跟 `std::cin` 没什么区别了。可以用流运算符 `>>` 来读取文件内容：
+
+```cpp
+int a = 0;
+input_file >> a;
+```
+
+也可以用 `std::getline` 读取一行：
+
+```cpp
+std::string s;
+std::getline(input_file, s);
+```
+
+C++ 中多处体现了流，除了 `fstream` 外还有 `sstream`，也即流的来源从文件变成了字符串，使用方法跟 `fstream` 是很类似的，不赘述。
