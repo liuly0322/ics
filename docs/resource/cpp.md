@@ -119,7 +119,7 @@ std::tuple<std::string, unsigned, bool> foo() {
 };
 
 int main() {
-    // std::tuple<std::string, unsigned, bool> result = foo;
+    // std::tuple<std::string, unsigned, bool> result = foo();
     auto result = foo(); // 与上面被注释的代码等价
 }
 ```
