@@ -44,7 +44,7 @@ sudo apt install libboost-all-dev
 之前我们已经介绍了 Makefile，那么 CMake 又有什么用呢？
 
 - CMake 的语法更加简单
-- CMake 能更好的跨平台，不仅可以生成 Makefile，还可以兼容其他构架系统
+- CMake 能更好的跨平台，不仅可以生成 Makefile，还可以兼容其他构建系统
 
 例如，如果你想在你的项目中使用你安装好的 Boost 库，使用 Make 可能需要手动指定 Boost 库的路径，但是 CMake 可以自动寻找 Boost 库，所以只需要有下面几行 CMake 代码就可以了：
 
