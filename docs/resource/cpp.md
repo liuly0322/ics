@@ -14,11 +14,15 @@
 #include <iostream>
 
 int main() {
-    int a = 0;
-    std::cin >> a; // 读入 a
-    std::cout << a << std::endl; // 输出 a
+    int a = 0, b = 0;
+    // 读入 a 和 b (类似于两个 scanf)
+    std::cin >> a >> b;
+    // 输出 a 和 b，std::endl 相当于换行
+    std::cout << a << ' ' << b << std::endl;
 }
 ```
+
+这两个函数可以「流式」输入输出，`stream` 就是流的意思。
 
 这里的 `std` 是 `namespace` (命名空间), 用来将代码组织到逻辑组中, 同时防止函数变量等的重名。
 
@@ -37,7 +41,7 @@ STL (Standard Template Library), 意为标准模板库, 核心包含容器, 算�
 
 ## C++ string
 
-C 对于 `string` 提供的 API 很少, 也不太好用, 因此 C++ 提供了 `std::string` 这个类, 具体的 API 可以看 https://cplusplus.com/reference/string/string/。
+C 对于 `string`（实质是字符数组）提供的 API 很少, 也不太好用, 因此 C++ 提供了 `std::string` 这个类, 具体的 API 可以看 https://cplusplus.com/reference/string/string/。
 
 常用方法的诸如:
 
@@ -115,7 +119,8 @@ std::tuple<std::string, unsigned, bool> foo() {
 };
 
 int main() {
-    auto result = foo();
+    // std::tuple<std::string, unsigned, bool> result = foo;
+    auto result = foo(); // 与上面被注释的代码等价
 }
 ```
 
@@ -170,6 +175,8 @@ int main() {
 `typename T` 模版参数 `T`，在之后的模板函数 `add` 中 `T` 便可作为类型被使用。模板函数的例化也很简单，在之后加上尖括号，里面写上类型即可。
 
 还有模板类，可以自行了解。
+
+模板的实例化是在编译期间而非运行时完成，这意味着每个实例都会对应产生一份相应的二进制代码，因此滥用模板可能会使可执行文件体积大大增加，即所谓的「二进制膨胀」。
 
 ## 运算符重载
 
