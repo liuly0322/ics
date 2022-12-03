@@ -31,7 +31,7 @@
 
 Boost 库一般以源文件（头文件，便于知道函数声明）和链接库形式在包管理器分发。对于 Ubuntu 系统而言：
 
-```shell
+```bash
 sudo apt install libboost-all-dev
 ```
 
@@ -63,7 +63,7 @@ endif()
 
 当然，本次实验我们并不需要知道具体的 CMake 语法，只需要会使用就可以了。
 
-```
+```bash
 mkdir build # 创建一个文件夹，名字叫 build，我们在这里生成可执行文件
 cd build    # 进入 build 文件夹
 cmake ..    # 两个点是上一级目录的意思，这里是根据上一级目录（也就是项目根目录）的 CMake 配置文件来产生 Makefile
