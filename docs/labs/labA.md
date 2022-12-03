@@ -1,6 +1,14 @@
 # Lab A
 
-（WIP）
+## 勘误
+
+实验文档 pdf 最后一面的测试指令改为：
+
+```shell
+mkdir /test/actual
+./assembler -f ./test/testcases/test1.asm -o ./test/actual/test1.bin
+diff ./test/actual/test1.bin ./test/expected/test1.bin
+```
 
 ## handout
 

@@ -1,6 +1,8 @@
 # Lab S
 
-（WIP）
+## 勘误
+
+`include/common.h` 中需要额外包含头文件：`#include <bitset>`
 
 ## handout
 
