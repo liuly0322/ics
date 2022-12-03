@@ -59,3 +59,16 @@ diff ./test/actual/test1.bin ./test/expected/test1.bin
 
 - C/CPP 代码是如何编译到程序的？
 - 一个 C/CPP 工程可能会包含很多源代码文件，如果每次都完全编译，会耗费大量的时间，Make 是如何解决这一问题的？
+
+## 代码编辑
+
+以下都是能够完成附加实验的代码编辑方案：
+
+如果使用 Vlab:
+- 采用 Vlab 图形界面的 VSCode
+- 采用 Vlab 提供的[网页 VSCode](https://vlab.ustc.edu.cn/docs/apps/vscode/)
+- 采用 SSH 远程连接（见习题课演示）
+
+如果使用本地：
+- 可以使用 IDE，比如 CLion
+- 可以使用本地 VSCode
