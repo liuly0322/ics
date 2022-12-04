@@ -2,6 +2,18 @@
 
 ## 勘误
 
+`src/assembler.h` 中，对 BR 的注释：
+
+```cpp
+"BR",     // 02: "0000000" + pcoffset(line[1],9)
+```
+
+改为：
+
+```cpp
+"BR",     // 02: "0000111" + pcoffset(line[1],9)
+```
+
 实验文档 pdf 最后一面的测试指令改为：
 
 ```bash
