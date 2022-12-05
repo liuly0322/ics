@@ -32,12 +32,23 @@
 Boost 库一般以源文件（头文件，便于知道函数声明）和链接库形式在包管理器分发。对于 Ubuntu 系统而言：
 
 ```bash
+sudo apt update
 sudo apt install libboost-all-dev
 ```
 
 即可安装上 Boost 库。
 
 可以尝试使用 `find /usr -name boost` 来找到安装后的 `boost` 库的位置。
+
+### 附：APT
+
+> APT 的全称是 Advance Package Tool，是一个处理在 Debian、Ubuntu 或者其他衍生发行版的 Linux 上安装和移除软件的自由软件。
+> 
+> 一般我们所认知的「软件商店」都是全程联网的，搜索等操作都会往服务器发送请求后返回最新的结果，但 APT 的策略有所不同：在计算机本地，系统会维护一个包列表，在这个列表里面，包含了软件信息以及软件包的依赖关系，在执行 `apt install` 命令时，会从这个列表中读取出想要安装的软件信息，包括下载地址、软件版本、依赖的包，同时 apt 会对依赖的包递归执行如上操作，直到不再有新的依赖包。如上得到的所有包，将会是在 `apt install some-package` 时安装的。
+>
+> 本地的这一包列表一般需要通过 `apt update` 命令手动更新。
+
+以上内容参考自 [Linux 101-使用包管系统安装](https://101.lug.ustc.edu.cn/Ch03/#use-package-management-system)。
 
 ## CMake
 
