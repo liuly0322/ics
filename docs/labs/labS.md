@@ -48,7 +48,7 @@ sudo apt install libboost-all-dev
 >
 > 本地的这一包列表一般需要通过 `apt update` 命令手动更新。
 
-以上内容参考自 [Linux 101-使用包管系统安装](https://101.lug.ustc.edu.cn/Ch03/#use-package-management-system)。
+以上内容参考自 [Linux 101-使用包管系统安装](https://101.lug.ustc.edu.cn/Ch03/#use-package-management-system)（[CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/)）。
 
 ## CMake
 
