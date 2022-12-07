@@ -18,7 +18,7 @@
 
 ```bash
 # 创建存放输出的文件夹，若已经创建可忽略
-mkdir /test/actual
+mkdir ./test/actual
 # 运行汇编器，对测试样例汇编
 ./assembler -f ./test/testcases/test1.asm -o ./test/actual/test1.bin
 # 比较实际输出和预期输出，如果一致，应该什么都不显示
