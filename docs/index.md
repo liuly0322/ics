@@ -14,6 +14,7 @@
   - [作业二](/homework/hw2.html) 已公布，DDL：10.25 23：30
   - [作业三](/homework/hw3.html) 已公布，DDL：10.31 23：30
   - [作业四](/homework/hw4.html) 已公布，DDL：11.05 23：30
+  - [作业五](/homework/hw5.html) 已公布，DDL：12.21 23：30
 - 实验
   - [实验一](/labs/lab1.html) 已公布，DDL: 11.09 23:30
   - [实验二](/labs/lab2.html) 已公布，DDL: 12.07 23:30
