@@ -13,6 +13,18 @@ ddl：12.28 23:30
   └── lab5.asm
   ```
 
+以下 python 脚本可能会理解题目和验证结果
+
+```python
+def honoi(n):
+    if n == 0:
+        return 0
+    return 2 * honoi(n-1) + 1
+
+for i in range(10):
+    print(f"Tower of honoi with {i} disk(s) needs {honoi(i)} move(s).")
+```
+
 ## 实验说明
 
 - 本次实验详细说明已包含在实验 pdf 文档内
