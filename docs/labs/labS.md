@@ -8,6 +8,7 @@
 
 - [PDF](/pdf/LAB_S.pdf)
 - [框架](/LAB_S_Attachment.zip)
+- [测试用例](/LAB_S_Test.zip)
 
 [可能需要的 C++ 知识](/resource/cpp.html)
 
