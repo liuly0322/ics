@@ -13,7 +13,15 @@ ddl：12.28 23:30
   └── lab5.asm
   ```
 
-以下 python 脚本可能会理解题目和验证结果
+(PDF 更新) Please initialize USP by setting R6 to a appropriate value such as xFDFF at the
+begining of your user program.
+
+> 实验有困难？请仔细阅读第九章以下内容：
+> - 特权级与地址空间布局
+> - MMIO 及基于轮询的输入输出，TRAP 服务例程
+> - 中断驱动的 I/O 及中断服务例程
+
+以下 python 脚本可能会帮助你理解题目和验证结果
 
 ```python
 def honoi(n):
