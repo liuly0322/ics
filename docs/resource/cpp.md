@@ -41,7 +41,7 @@ STL (Standard Template Library), 意为标准模板库, 核心包含容器, 算�
 
 ## C++ string
 
-C 对于 `string`（实质是字符数组）提供的 API 很少, 也不太好用, 因此 C++ 提供了 `std::string` 这个类, 具体的 API 可以看 https://cplusplus.com/reference/string/string/。
+C 对于 `string`（实质是字符数组）提供的 API 很少, 也不太好用, 因此 C++ 提供了 `std::string` 这个类, 具体的 API 可以看 https://cplusplus.com/reference/string/string/
 
 常用方法的诸如:
 

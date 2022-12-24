@@ -1,6 +1,6 @@
 # HW && Lab Q&A
 
-## Q: HW3 T4 题意不太清楚?
+## Q：HW3 T4 题意不太清楚?
 
 意思就是要你算执行这条指令每个 phase 花去多少 cycle, 然后对于不访存的 phase, 如果在这条指令执行时有这个 phase, 算 1 周期, 不包含算 0, 对于访存的 phase, 按照题意算周期.
 
@@ -17,3 +17,13 @@
 4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。
 
 5. 有人问 x800 的 code set KBSR 的时候为什么这么麻烦，这是为了不改变其他位，这里的处理是 clear bit 14，之后在 ADD 掩码，也可以考虑对 KBSR 取反后，clear bit 14 再取反，也能达到一样的目的。
+
+## Q：关于 Windows 下连接 Vlab 的常见问题
+
+1. 配置文件中的 `~` 指的是家目录，Windows 下的家目录是 `C:\Users\你的用户名`，例如你的用户名是 ikun，那你的配置文件路径就是 `C:\Users\ikun\.ssh\config`。这也可以通过在 VSCode 下使用 `ctrl + shift + p`，选择 `Remote-SSH: Open SSH Configuration File` 来打开。同时这个文件也是没有后缀名的，不要写成 json 之类的乱七八糟的格式，按照我 PPT 里写的来就行，注意 IdentityFile 的路径一定要改对。
+
+2. 修改权限那一步，请参考 [知乎文章](https://zhuanlan.zhihu.com/p/364189095)。
+
+3. 写完配置文件后，可以打开终端（也就是 Powershell），输入 `ssh vlab`（这里的 `vlab` 是你配置文件里的 `HostName`），如果出现 `Permission denied (publickey).` 的错误，那就是你的权限没改好。只有在终端成功连接，VSCode 才能成功连接。
+
+4. 使用 VSCode 第一次连接时会弹出让你选择 Remote Platform 的选项框，需要选择 Linux，否则会卡住。
