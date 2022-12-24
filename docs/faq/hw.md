@@ -24,6 +24,8 @@
 
 2. 修改权限那一步，请参考 [知乎文章](https://zhuanlan.zhihu.com/p/364189095)。
 
-3. 写完配置文件后，可以打开终端（也就是 Powershell），输入 `ssh vlab`（这里的 `vlab` 是你配置文件里的 `HostName`），如果出现 `Permission denied (publickey).` 的错误，那就是你的权限没改好。只有在终端成功连接，VSCode 才能成功连接。
+3. 写完配置文件后，可以打开终端（也就是 Powershell），输入 `ssh vlab`（这里的 `vlab` 是你配置文件里的 `HostName`），如果出现 `Permission denied (publickey).` 的错误，那就是你的权限没改好。只有在终端成功连接，VSCode 才能成功连接。如何打开终端之类的问题，**请善用搜索引擎**。
 
-4. 使用 VSCode 第一次连接时会弹出让你选择 Remote Platform 的选项框，需要选择 Linux，否则会卡住。
+4. 上一步中如果报错“garbage at end of line 1”，说明 IdentityFile 的路径中含有空格，请用双引号将路径括起来。
+
+5. 使用 VSCode 第一次连接时会弹出让你选择 Remote Platform 的选项框，需要选择 Linux，否则会卡住。
