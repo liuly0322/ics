@@ -13,10 +13,13 @@
 3. 本次实验只能使用 LC3Tools 进行测试，没有网站的评测。同时在使用软件测试时，需要注意：
     - 键盘输入需要点进左下角的 console 再输入 (click to focus)，不然不能正常读入。
     - 一定要在设置里打开 `Ignore privileged mode` 选项，否则会导致程序异常终止。
+    - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，可以尝试把 interrupt service 内容改成只有 `HALT`，重启软件再重新尝试，如果依然不行，你可能需要重装 LC3Tools。
 
-4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。
+4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。至于 x3FFF 处的注释，只是说明 `HANOI_N` 是存在这个地方的，并不需要在这里写代码。
 
 5. 有人问 x800 的 code set KBSR 的时候为什么这么麻烦，这是为了不改变其他位，这里的处理是 clear bit 14，之后在 ADD 掩码，也可以考虑对 KBSR 取反后，clear bit 14 再取反，也能达到一样的目的。
+
+6. 一开始一大段的汉诺塔介绍只是为了教大家汉诺塔的递推公式，要求大家编写满足递推式的递归程序来计算 `HANOI(N)`，并不需要模拟柱子的移动之类的东西。
 
 ## Q：关于 Windows 下连接 Vlab 的常见问题
 
