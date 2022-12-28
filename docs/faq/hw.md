@@ -11,9 +11,10 @@
 2. 编写递归程序涉及到用户栈 (USP)，用户栈使用的时候要给 R6 设置一个合法的初始位置，比如 xFDFF。
 
 3. 本次实验只能使用 LC3Tools 进行测试，没有网站的评测。同时在使用软件测试时，需要注意：
-    - 键盘输入需要点进左下角的 console 再输入 (click to focus)，不然不能正常读入。
-    - 一定要在设置里打开 `Ignore privileged mode` 选项，否则会导致程序异常终止。
-    - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，可以尝试把 interrupt service 内容改成只有 `HALT`，重启软件再重新尝试，如果依然不行，你可能需要重装 LC3Tools。
+
+   - 键盘输入需要点进左下角的 console 再输入 (click to focus)，不然不能正常读入。
+   - 一定要在设置里打开 `Ignore privileged mode` 选项，否则会导致程序异常终止。
+   - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，可以尝试把 interrupt service 内容改成只有 `HALT`，重启软件再重新尝试，如果依然不行，你可能需要重装 LC3Tools。
 
 4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。至于 x3FFF 处的注释，只是说明 `HANOI_N` 是存在这个地方的，并不需要在这里写代码。
 
@@ -21,6 +22,11 @@
 
 6. 一开始一大段的汉诺塔介绍只是为了教大家汉诺塔的递推公式，要求大家编写满足递推式的递归程序来计算 `HANOI(N)`，并不需要模拟柱子的移动之类的东西。
 
+7. 出现 `Privilege violation` 错误，大概率是访问了不该访问的内存，看看你的跳转指令是否有问题，比如忘记 save R7。
+
+8. `Illegal opcode`，大概率是把数据当成指令执行，跟 7 的错误很像，可以通过打断点单步调试来找 bug。同时请注意，JSR 后面的 subroutine，需要你通过 step in 才能进去调试，而不是 step over（这和高级语言的调试器是一致的）。
+
+9. 不同的 `.ORIG` 块作用是把代码插在不同的地址，程序将会从第一个 `.ORIG` 块开始执行，在本次实验中也就是 x800。同时多个 `.ORIG` 块也并不是并发运行的，如果还不理解中断，请仔细阅读书本第九章的相关知识。不同的 `.ORIG` 块不能 share label，因此对于同一个地址，例如 `HANOI_N`，你需要在不同的 `.ORIG` 块中用不同的名字 `.FILL` 相同的值。
 ## Q：关于 Windows 下连接 Vlab 的常见问题
 
 1. 配置文件中的 `~` 指的是家目录，Windows 下的家目录是 `C:\Users\你的用户名`，例如你的用户名是 ikun，那你的配置文件路径就是 `C:\Users\ikun\.ssh\config`。这也可以通过在 VSCode 下使用 `ctrl + shift + p`，选择 `Remote-SSH: Open SSH Configuration File` 来打开。同时这个文件也是没有后缀名的，不要写成 json 之类的乱七八糟的格式，按照我 PPT 里写的来就行，注意 IdentityFile 的路径一定要改对。
