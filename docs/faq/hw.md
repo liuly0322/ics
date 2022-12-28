@@ -13,10 +13,10 @@
 3. 本次实验只能使用 LC3Tools 进行测试，没有网站的评测。同时在使用软件测试时，需要注意：
 
    - 键盘输入需要点进左下角的 console 再输入 (click to focus)，不然不能正常读入。
-   - 一定要在设置里打开 `Ignore privileged mode` 选项，否则会导致程序异常终止。
-   - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，可以尝试把 interrupt service 内容改成只有 `HALT`，重启软件再重新尝试，如果依然不行，你可能需要重装 LC3Tools。
+   - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，建议重启软件再重新尝试。
+   > 需要重启软件可能是因为之前键盘有输入把 kbsr 最高位设为 1(kbsr 从 x4000 变为 xC000)，但是没有读 kbdr(trap x21/ldi r0,kbdr) 把 kbsr 最高位复位 (kbsr 变回 x4000)。kbsr 没有复位的情况下不会对后续的键盘输入做相应，也就是上边说的输入无效的问题。LC3 tool 的 reinitialize machine 部分不会重置 IO 相关内存(这个时候 kbsr 一直是 xC000，reinitialize 之后还是不能输入)，所以只能通过重启解决。避免这个问题的方法是接收到键盘输入以后及时读出 kbdr 的数据使 kbsr 复位。
 
-4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。至于 x3FFF 处的注释，只是说明 `HANOI_N` 是存在这个地方的，并不需要在这里写代码。
+4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。至于 x3FFF 处的注释，只是说明 `HANOI_N` 是存在这个地方的，并不需要在这里写代码。不理解中断请仔细阅读书本第九章。
 
 5. 有人问 x800 的 code set KBSR 的时候为什么这么麻烦，这是为了不改变其他位，这里的处理是 clear bit 14，之后在 ADD 掩码，也可以考虑对 KBSR 取反后，clear bit 14 再取反，也能达到一样的目的。
 
@@ -26,7 +26,8 @@
 
 8. `Illegal opcode`，大概率是把数据当成指令执行，跟 7 的错误很像，可以通过打断点单步调试来找 bug。同时请注意，JSR 后面的 subroutine，需要你通过 step in 才能进去调试，而不是 step over（这和高级语言的调试器是一致的）。
 
-9. 不同的 `.ORIG` 块作用是把代码插在不同的地址，程序将会从第一个 `.ORIG` 块开始执行，在本次实验中也就是 x800。同时多个 `.ORIG` 块也并不是并发运行的，如果还不理解中断，请仔细阅读书本第九章的相关知识。不同的 `.ORIG` 块不能 share label，因此对于同一个地址，例如 `HANOI_N`，你需要在不同的 `.ORIG` 块中用不同的名字 `.FILL` 相同的值。
+9. 不同的 `.ORIG` 块作用是把代码插在不同的地址，程序将会从第一个 `.ORIG` 块开始执行，在本次实验中也就是 x800。同时多个 `.ORIG` 块也并不是并行运行的，如果还不理解中断，请仔细阅读书本第九章的相关知识。不同的 `.ORIG` 块不能 share label，因此对于同一个地址，例如 `HANOI_N`，你需要在不同的 `.ORIG` 块中用不同的名字 `.FILL` 相同的值。
+
 ## Q：关于 Windows 下连接 Vlab 的常见问题
 
 1. 配置文件中的 `~` 指的是家目录，Windows 下的家目录是 `C:\Users\你的用户名`，例如你的用户名是 ikun，那你的配置文件路径就是 `C:\Users\ikun\.ssh\config`。这也可以通过在 VSCode 下使用 `ctrl + shift + p`，选择 `Remote-SSH: Open SSH Configuration File` 来打开。同时这个文件也是没有后缀名的，不要写成 json 之类的乱七八糟的格式，按照我 PPT 里写的来就行，注意 IdentityFile 的路径一定要改对。
