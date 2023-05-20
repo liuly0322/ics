@@ -31,7 +31,7 @@ cd ics  # 进入目录
 安装 pnpm（已安装的可以跳过）
 
 ```
-npm install pnpm -g
+npm install -g pnpm
 ```
 
 使用 pnpm 安装本项目所需依赖
