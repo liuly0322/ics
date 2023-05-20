@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: lint
-        run: pnpm i && pnpm lint
+        run: pnpm i --no-frozen-lockfile && pnpm lint
 
       - name: build
         run: pnpm build && touch docs/.vitepress/dist/.nojekyll && echo 'ics.liuly.moe' > docs/.vitepress/dist/CNAME
