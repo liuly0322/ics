@@ -7,6 +7,8 @@
 - BB 系统提交电子版 PDF，允许手写拍照、latex、markdown、word 等
   - 文件重命名为 `PB21xxxxxx_姓名_作业5.pdf` 的格式
 
-- DDL：12.21 23：30
+- DDL：12.28 23：30
+
+- [答案](/pdf/hw5_ans.pdf)
 
 - 本次作业 [PDF](/pdf/hw5.pdf)
