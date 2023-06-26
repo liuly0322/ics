@@ -1,8 +1,8 @@
 # HW && Lab Q&A
 
-## Q：HW3 T4 题意不太清楚?
+## Q：HW3 T4 题意不太清楚？
 
-意思就是要你算执行这条指令每个 phase 花去多少 cycle, 然后对于不访存的 phase, 如果在这条指令执行时有这个 phase, 算 1 周期, 不包含算 0, 对于访存的 phase, 按照题意算周期.
+意思就是要你算执行这条指令每个 phase 花去多少 cycle, 然后对于不访存的 phase, 如果在这条指令执行时有这个 phase, 算 1 周期，不包含算 0, 对于访存的 phase, 按照题意算周期。
 
 ## Q：Lab5 一些问题和提示
 
@@ -14,7 +14,7 @@
 
    - 键盘输入需要点进左下角的 console 再输入 (click to focus)，不然不能正常读入。
    - LC3Tools 使用时可能会出现 bug，例如循环输出学号时对键盘输入没有任何反应，如果你出现了这样的情况，有很大可能是 LC3Tools 的 bug，建议重启软件再重新尝试。
-   > 需要重启软件可能是因为之前键盘有输入把 kbsr 最高位设为 1(kbsr 从 x4000 变为 xC000)，但是没有读 kbdr(trap x21/ldi r0,kbdr) 把 kbsr 最高位复位 (kbsr 变回 x4000)。kbsr 没有复位的情况下不会对后续的键盘输入做相应，也就是上边说的输入无效的问题。LC3 tool 的 reinitialize machine 部分不会重置 IO 相关内存(这个时候 kbsr 一直是 xC000，reinitialize 之后还是不能输入)，所以只能通过重启解决。避免这个问题的方法是接收到键盘输入以后及时读出 kbdr 的数据使 kbsr 复位。
+   > 需要重启软件可能是因为之前键盘有输入把 kbsr 最高位设为 1(kbsr 从 x4000 变为 xC000)，但是没有读 kbdr(trap x21/ldi r0,kbdr) 把 kbsr 最高位复位 (kbsr 变回 x4000)。kbsr 没有复位的情况下不会对后续的键盘输入做相应，也就是上边说的输入无效的问题。LC3 tool 的 reinitialize machine 部分不会重置 IO 相关内存 (这个时候 kbsr 一直是 xC000，reinitialize 之后还是不能输入)，所以只能通过重启解决。避免这个问题的方法是接收到键盘输入以后及时读出 kbdr 的数据使 kbsr 复位。
 
 4. 实验只需要在提供的 starter code 的基础上编写 x3000 的 user program 和 x1000 的 interrupt service，两部分之间的关联（也即中断），已经在 x800 的地方写好了。至于 x3FFF 处的注释，只是说明 `HANOI_N` 是存在这个地方的，并不需要在这里写代码。不理解中断请仔细阅读书本第九章。
 

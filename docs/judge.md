@@ -34,7 +34,7 @@
 
 ```js
 // 可以访问两个参数
-// lc3 为模拟器对象, testcase 为输入样例（字符串类型）
+// lc3 为模拟器对象，testcase 为输入样例（字符串类型）
 
 // 字符串转换为数字
 const input = parseInt(testcase)

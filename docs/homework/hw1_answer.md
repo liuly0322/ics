@@ -57,7 +57,7 @@ $$4.3 = 100.01\_0011\_0011\cdots = (1.0001\ 0011\ 0011\cdots)\times2^2$$
 
 >可能有同学得到的结果为 0 10000001 00010011001100110011001
 >
->但是事实上最后存在进位，（最后几位为 10011，进位为1010）这不作要求，仅作拓展，也即题目描述的与 4.3 最接近的数
+>但是事实上最后存在进位，（最后几位为 10011，进位为 1010）这不作要求，仅作拓展，也即题目描述的与 4.3 最接近的数
 
 示例代码：
 
@@ -172,7 +172,7 @@ $$
 $$
 \begin{align*}
 1.frac_a \times 2^{exp_a} \times 1.frac_b\times2^{exp_b} &= 1.frac_a \times 1.frac_b \times 2^{exp_a + exp_b}\\
-1.\underbrace{frac_a}_{23位}\times 1.\underbrace{frac_b}_{23位} &= \underbrace{FRAC[47]FRAC[46]}_{2位}.\underbrace{frac}_{46位}
+1.\underbrace{frac_a}_{23 位}\times 1.\underbrace{frac_b}_{23 位} &= \underbrace{FRAC[47]FRAC[46]}_{2 位}.\underbrace{frac}_{46 位}
 \end{align*}
 $$
 如果 $FRAC[47]$ 为 1，则小数点应该再往前点一位，所以指数位还需 + 1；否则 $FRAC[46]$ 为 1，小数点不变，因此指数位不需要 + 1。
@@ -182,7 +182,7 @@ $$
 $$
 \begin{align*}
 1.frac_a \times 2^{exp_a} + 1.frac_b\times2^{exp_b} &= (1.frac_a + 1.frac_b\times 2^{exp_b-exp_a}) \times 2^{exp_a}\\
-\underbrace{1.frac_a}_{24位} + \underbrace{1.frac_b\times2^{exp_b-exp_a}}_{24位} &= \underbrace{FRAC[24]FRAC[23]}_{2位}.\underbrace{frac}_{23位}
+\underbrace{1.frac_a}_{24 位} + \underbrace{1.frac_b\times2^{exp_b-exp_a}}_{24 位} &= \underbrace{FRAC[24]FRAC[23]}_{2 位}.\underbrace{frac}_{23 位}
 \end{align*}
 $$
 
